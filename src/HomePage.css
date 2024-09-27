@@ -1,0 +1,25 @@
+.home-posts-container{
+    display: grid;
+    margin-left: 350px;
+    column-gap: 5px;
+    row-gap: 5px;
+    grid-template-columns: repeat(3, 1fr);
+}
+
+
+.home-posts-container .post-container {
+    width: 240px;
+    height: 240px;
+    margin: 1px;
+    padding: 3px;
+}
+
+.home-posts-container .post-container img {
+    height: 100%;
+    width: 100%;
+}
+
+.home-username {
+    width: 100%;
+    text-align: center;
+}

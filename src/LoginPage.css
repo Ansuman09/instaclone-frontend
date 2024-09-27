@@ -1,0 +1,47 @@
+.login-container{
+    display: grid;
+    justify-content: center;
+    padding: 3%;
+    text-align: center;
+}
+
+.app-name{
+    font-style: italic;
+    font-family:Georgia, Times, 'Times New Roman', serif;
+    font-size: 3rem;
+}
+
+.login-form {
+    display: grid;
+    background-color: rgb(109, 216, 106);
+    padding: 20px;
+    border-radius: 5px;
+    border: 1px solid black;
+}
+
+.login-form input{
+    padding: 20px;
+    margin: 5px 0 10px 0;
+    border-radius: 5px;
+    width: 300px;
+}
+
+.login-form button{
+    padding: 10px;
+    font-size: 2rem;
+    background-color: black;
+    color: white;
+    cursor: pointer;
+    border-radius: 3px;
+    border: none;
+}
+
+.login-form button:hover{
+    font-size: 2.1rem;
+}
+
+
+.login-form label{
+    text-align: left;
+    font-weight: 800;
+}
