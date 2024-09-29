@@ -12,6 +12,8 @@ const FeedPage=()=>{
     const token = localStorage.getItem('token');
     const visitorUserId = localStorage.getItem('id');
     const [postsLoading,setPostsLoading] = useState(true);
+
+    const [userProfileImages,setUserProfileImages]=useState([]);
     const [postImages,setPostImages]=useState([]);
     const [likeStatus,setLikeStatus] = useState();
     const [commentStatus,setCommentStatus] = useState();
@@ -68,7 +70,6 @@ const FeedPage=()=>{
         .then(data=>{
             setPosts(data)
             console.log(data)
-            setLoading(false)
             setPostsLoading(false);
         })
     },[likeStatus,commentStatus])
@@ -80,19 +81,26 @@ const FeedPage=()=>{
           const postsDataWithImageUrl = await Promise.all(
             posts.map(async (post) => {
               const imageUrl = await fetchImageUrl(post.image.imageName); // Ensure this is a valid async function
+              const profileImageUrl=await fetchImageUrl(post.userinfo.profile_image)
               console.log(`Got image_url as ${imageUrl}`);
+              console.log(`Got profile image url as ${profileImageUrl}`)
               return {
-                ...post.image,
-                imageUrl
+                ...post,
+                userinfo: {
+                    ...post.userinfo,
+                    profileImageUrl
+                },
+                imageUrl,
               };
             })
           );
           setPostImages(postsDataWithImageUrl);
+          console.log(postsDataWithImageUrl)
         };
 
-        update_posts(); // Call the async function
-        // setLoading(false);
-        // console.log(postImages)
+        update_posts();
+        
+        setLoading(false); 
       }, [postsLoading]); // Trigger when postImages or postsLoading changes
   
   
@@ -185,7 +193,7 @@ const FeedPage=()=>{
                     <div key={post.post_id} className="post-container">
                         <div id={post.post_id} className="post-ownerinfo">
                         
-                        <img src={post.userinfo.profile_image}></img>
+                        {postImages.filter(image=>post.post_id==image.post_id).map(image=><img  src={image.userinfo.profileImageUrl}></img>)}
                         <h4>{post.userinfo.username}</h4>
                         </div>
                         {postImages.filter(image=>post.post_id==image.post_id).map(image=><img  src={image.imageUrl}></img>)}

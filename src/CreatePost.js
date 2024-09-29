@@ -1,5 +1,10 @@
 import React, { useEffect, useState } from "react";
 import "./CreatePost.css"
+import { faArrowRight } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import NavBar from "./NavBar";
+
+
 const CreatePost=()=>{
     const [image,setImage] = useState(null);
     const [imageFileToSend,setImageFileToSend]=useState(null);
@@ -47,17 +52,25 @@ const CreatePost=()=>{
     
     return (
         <div>
-            <form>
-                <label>image_url</label>
-                <input type="file" onChange={(e)=>handleImageSelection(e.target.files[0])}></input>
+            <div style={{'padding-bottom':'120px'}}>
+              <NavBar />
+              
+            </div>
+        
+        <div className="new-post">
+            
+            <div className="new-post-container"> 
+            <form onSubmit={(e)=>handleAddpost(e)}>
+                <label>Upload an Image     </label>
+                <input type="file" className="browse-button" onChange={(e)=>handleImageSelection(e.target.files[0])}></input>
                 <br/>
-                {image &&<img src={image} className="new-post-image"></img>}
+                <img src={image} className="new-post-image"></img>
                 <br/>
-                <label>description</label>
-                <input value={description} onChange={(e)=>setDescription(e.target.value)}></input>
-                <br/>
-                <button type="button" onClick={handleAddpost}>Submit</button>
+                <input className="description-input" value={description} onChange={(e)=>setDescription(e.target.value)} placeholder="Write Something"></input>
+                <button className="submit-new-post" type="submit"><FontAwesomeIcon icon={faArrowRight}/></button>
             </form>
+            </div>
+        </div>
         </div>
     )
 }

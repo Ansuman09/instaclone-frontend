@@ -13,6 +13,10 @@ const UserProfile=()=>{
 
     const [postImages,setPostImages]=useState([]);
     const [posts,setPosts] = useState([]);
+
+    const [userLoading,setUserLoading]=useState(true);
+    const [userProfileImage,setUserProfileImage]=useState();
+    
     const [followers,setFollowers]=useState([]);
     const [following,setFollowing]=useState([]);
     const visitorUserId = localStorage.getItem('id')
@@ -72,7 +76,7 @@ const UserProfile=()=>{
         };
 
         fetchUserData();
-
+        setUserLoading(false);
     }, [followResponse]);
     
     useEffect(() => {
@@ -168,7 +172,7 @@ const UserProfile=()=>{
     
         fetchImageData(); // Call the async function here
     
-      }, [token]); // Dependency on token to ensure this runs when the token is available
+      }, [token,username]); // Dependency on token to ensure this runs when the token is available
     
         useEffect(() => {
           if (postsLoading) return; // Exit early if loading is not finished
@@ -247,6 +251,16 @@ const UserProfile=()=>{
         nav(`/userposts/${username}/${post_id}`)
     }
 
+    useEffect(()=>{
+      if (!user || !user.profile_image) return;
+      const getUserProfileImage= async ()=>{
+        const ProfileImageUrl=await fetchImageUrl(user.profile_image);
+        setUserProfileImage(ProfileImageUrl)
+      }
+      getUserProfileImage()
+    },[userLoading,user])
+
+
     if (loading){
         return (<h1>...Loading</h1>)
     }
@@ -264,7 +278,7 @@ const UserProfile=()=>{
               </div>  
               <div className="userinfo-container">
                 <div className="userimg-container">
-                <img src={user.profile_image}></img>
+                <img src={userProfileImage}></img>
                 
               </div>
               <div className="userinfo-followers">

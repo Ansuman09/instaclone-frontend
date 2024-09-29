@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router";
 import "./LoginPage.css"
+
 const SignupPage= () => {
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
@@ -22,15 +23,15 @@ const SignupPage= () => {
 
         if (errorMessage===null){
         try{
-        response = await fetch("http://localhost:8080/user/register",{
+        const response = await fetch("http://localhost:8080/user/register",{
             method:'POST',
             headers: {'Content-type':'application/json'},
             body: JSON.stringify(data)
         })
         
-        if(response){
+        if(response.ok){
             console.log(response);
-            console.log(data);
+            nav("/")
         }}catch (error){
             console.log(error)
             throw new Error("Can not connect to the server")
@@ -63,7 +64,7 @@ const SignupPage= () => {
                 </label>
                 <input type="password" onChange={(e) => (e.target.value===password ? setErrorMessage(null) : setErrorMessage("Password does not match"))} />
                 <br />
-                <button type="submit">Login</button>
+                <button type="submit">Sign Up</button>
                 {errorMessage && <p>{errorMessage}</p>}
             </form>
             </div>   

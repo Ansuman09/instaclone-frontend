@@ -96,7 +96,11 @@ const UserLogin = () => {
                 <button type="submit">Login</button>
                 {errorMessage && <p>{errorMessage}</p>}
             </form>
+            <p>
+                First time on the website? <i onClick={()=>{nav("/signup")}}>sign up</i>
+            </p>
             </div>   
+            
         </div>
     );
 };
