@@ -54,7 +54,7 @@ const FeedPage=()=>{
         // const token = sessionStorage.getItem('token')
         const userid = localStorage.getItem('id');
 
-        fetch(`http://localhost:8080/posts/feed/${userid}`,{
+        fetch(`http://localhost:8080/posts/feed`,{
             method: 'GET',
             headers:{
                 'Content-Type':'application/json',
@@ -104,7 +104,7 @@ const FeedPage=()=>{
       }, [postsLoading]); // Trigger when postImages or postsLoading changes
   
   
-    const handleLike=async(user_who_liked_id,liked_post_id)=>{
+    const handleLike=async(liked_post_id)=>{
 
         const json_body={
             post_id:liked_post_id,
@@ -112,7 +112,7 @@ const FeedPage=()=>{
         }
 
         try {
-            const request = await fetch(`http://localhost:8080/action/add/${user_who_liked_id}`,{
+            const request = await fetch(`http://localhost:8080/action/add`,{
                 method:'POST',
                 headers: {
                     'Content-Type':'application/json',
@@ -129,9 +129,9 @@ const FeedPage=()=>{
         }
     }
 
-    const handleUnlike=async(user_who_liked_id,liked_post_id)=>{
+    const handleUnlike=async(liked_post_id)=>{
         try {
-        const request = await fetch(`http://localhost:8080/action/delete/${liked_post_id}/${user_who_liked_id}`,{
+        const request = await fetch(`http://localhost:8080/action/delete/${liked_post_id}`,{
         method: 'DELETE',
         headers : {
         'Content-type':'application/json',
@@ -199,7 +199,7 @@ const FeedPage=()=>{
                         {postImages.filter(image=>post.post_id==image.post_id).map(image=><img  src={image.imageUrl}></img>)}
                         
                         <div className="post-actions">
-                          <button id={post.post_id} className={post.hasLiked? "liked-button":"unliked-button"} onClick={post.hasLiked ? ()=>handleUnlike(visitorUserId,post.post_id) : ()=>handleLike(visitorUserId,post.post_id)}><FontAwesomeIcon className="j" icon={faHeart}/></button>
+                          <button id={post.post_id} className={post.hasLiked? "liked-button":"unliked-button"} onClick={post.hasLiked ? ()=>handleUnlike(post.post_id) : ()=>handleLike(post.post_id)}><FontAwesomeIcon className="j" icon={faHeart}/></button>
                           <p>  {post.actions.length}</p>
                           <button id={post.post_id} type="button" className={`comment-btn`} onClick={()=>{handleComment();setCurrentlyEditingPostId(post.post_id),setComment('');if(prevPostId===post.post_id){setEnhance(false),setPrevPostId(null)}}}> <FontAwesomeIcon icon={faComment}/></button>
                         </div>

@@ -85,7 +85,7 @@ const UserProfile=()=>{
 
             try {
                 // Fetch posts data
-                const responseToGetPosts = await fetch(`http://localhost:8080/posts/home/${user.userid}/${visitorUserId}`, {
+                const responseToGetPosts = await fetch(`http://localhost:8080/posts/home/${username}`, {
                     method: "GET",
                     headers: {
                         "Content-Type": "application/json",
@@ -101,7 +101,7 @@ const UserProfile=()=>{
                 setPosts(postsData);
                 setPostsLoading(false);
                 // Fetch followers data
-                const responseToGetFollowers = await fetch(`http://localhost:8080/followers/userfollowers/${user.userid}`, {
+                const responseToGetFollowers = await fetch(`http://localhost:8080/followers/userfollowers/${username}`, {
                     method: 'GET',
                     headers: {
                         "Content-Type": "application/json",
@@ -117,7 +117,7 @@ const UserProfile=()=>{
                 setFollowers(followersData);
 
                 // Fetch following data
-                const responseToGetFollowing = await fetch(`http://localhost:8080/followers/following/${user.userid}`, {
+                const responseToGetFollowing = await fetch(`http://localhost:8080/followers/following/${username}`, {
                     method: 'GET',
                     headers: {
                         "Content-Type": "application/json",

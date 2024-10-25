@@ -21,38 +21,12 @@ const HomePage=()=>{
             
     const nav = useNavigate();
     
-    useEffect(()=>{
-      const fetchUserData = async () => {
-        try {
-          // Fetch user info
-          const response1 = await fetch(`http://localhost:8080/userinfo/${userid}`, {
-            method: 'GET',
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: `Bearer ${token}`
-            }
-          });
-  
-          if (!response1.ok) {
-            throw new Error("Failed to load user info");
-          }  
-          const userData = await response1.json();
-          setUser(userData);
-          console.log(userData)  
-          setUserLoading(false)
-          
-        }catch(error){
-          console.log(error)
-        }}
-        fetchUserData();
-    },[])
-
     useEffect(() => {
         const fetchData = async () => {
           try {   
             
             // Fetch posts data
-            const response2 = await fetch(`http://localhost:8080/posts/home/${userid}/${userid}`, {
+            const response2 = await fetch(`http://localhost:8080/posts/home`, {
               method: "GET",
               headers: {
                 "Content-Type": "application/json",
@@ -67,7 +41,7 @@ const HomePage=()=>{
             const postsData = await response2.json();
             setPosts(postsData);
             
-            const responseToGetFollowers= await fetch(`http://localhost:8080/followers/userfollowers/${userid}`,{
+            const responseToGetFollowers= await fetch(`http://localhost:8080/followers/userfollowers`,{
               method:'GET',
               headers: {
                 "Content-Type": "application/json",
@@ -84,7 +58,7 @@ const HomePage=()=>{
 
             // console.log(responseToGetFollowers)
 
-            const responseToGetFollowing= await fetch(`http://localhost:8080/followers/following/${userid}`,{
+            const responseToGetFollowing= await fetch(`http://localhost:8080/followers/following`,{
               method:'GET',
               headers: {
                 "Content-Type": "application/json",
@@ -111,12 +85,12 @@ const HomePage=()=>{
             setloading(false)
         }); // Invoke the async function
         
-      }, [user]); 
+      },[]); 
 
       useEffect(() => {
         const fetchImageData = async () => {
           try {
-            const responseToGetImagesByOwner = await fetch(`http://localhost:8080/postimages/all/${user.username}`, {
+            const responseToGetImagesByOwner = await fetch(`http://localhost:8080/postimages/all`, {
               method: "GET",
               headers: {
                 "Content-type": "application/json",
@@ -141,7 +115,7 @@ const HomePage=()=>{
     
         fetchImageData(); // Call the async function here
     
-      }, [token,user]); // Dependency on token to ensure this runs when the token is available
+      }, [token]); // Dependency on token to ensure this runs when the token is available
       
       const fetchImageUrl = async (imageName) => {
         console.log("Called image data");
@@ -193,17 +167,17 @@ const HomePage=()=>{
       
     const handleViewPost=(e,post_id)=>{
         e.preventDefault()
-        nav(`/userposts/${user.username}/${post_id}`)
+        nav(`/userposts/${post_id}`)
     }
   
-    useEffect(()=>{
-      if (!user || !user.profile_image) return;
-      const getUserProfileImage= async ()=>{
-        const ProfileImageUrl=await fetchImageUrl(user.profile_image);
-        setUserProfileImage(ProfileImageUrl)
-      }
-      getUserProfileImage()
-    },[userLoading,user])
+    // useEffect(()=>{
+    //   if (!user || !user.profile_image) return;
+    //   const getUserProfileImage= async ()=>{
+    //     const ProfileImageUrl=await fetchImageUrl(user.profile_image);
+    //     setUserProfileImage(ProfileImageUrl)
+    //   }
+    //   getUserProfileImage()
+    // },[userLoading,user])
 
     if (loading){
         return (<div>
@@ -217,7 +191,7 @@ const HomePage=()=>{
               
             </div>
             <div className="home-username">
-                <h4>{user.username}</h4>
+                <h4>{}</h4>
               </div>  
               <div className="userinfo-container">
                 <div className="userimg-container">

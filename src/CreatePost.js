@@ -9,7 +9,6 @@ const CreatePost=()=>{
     const [image,setImage] = useState(null);
     const [imageFileToSend,setImageFileToSend]=useState(null);
     const [description,setDescription]=useState("");
-    const owner_id = parseInt(localStorage.getItem('id'));
     const token = localStorage.getItem('token')
 
     const handleImageSelection=(imageFile)=>{
@@ -27,7 +26,6 @@ const CreatePost=()=>{
         }
     
         const formData = new FormData();
-        formData.append("owner_id", owner_id);  // Append owner_id
         formData.append("description", description);  // Append description
         formData.append("image", imageFileToSend);  // Append the file
     
@@ -47,7 +45,7 @@ const CreatePost=()=>{
         }
         
         setImage(null);
-        setDescription(null);
+        setDescription("");
     };
     
     return (
