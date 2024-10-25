@@ -3,6 +3,7 @@ import { useEffect,useState } from "react";
 import { useNavigate } from "react-router-dom";
 import NavBar from "./NavBar";
 import "./HomePage.css";
+import { faRetweet } from "@fortawesome/free-solid-svg-icons";
 
 const HomePage=()=>{
 
@@ -12,15 +13,45 @@ const HomePage=()=>{
     const [followers,setFollowers]=useState([]);
     const [following,setFollowing]=useState([]);
 
-    const [userLoading,setUserLoading]=useState(true);
     const [userProfileImage,setUserProfileImage]=useState();
     const [postsLoading,setPostsLoading]=useState(true);
     const [postImages,setPostImages]=useState([]);    
-    const userid = localStorage.getItem('id')
     const token = localStorage.getItem('token')
-            
+    
+    const visitor = localStorage.getItem('visitor');
     const nav = useNavigate();
     
+    useEffect(()=>{
+      const fetchUserInfo= async()=> {
+        try {
+        const response=await fetch("http://localhost:8080/userinfo/image",{
+          method:"GET",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`
+          }
+
+        });
+
+        const userData=await response.json();
+        setUser(userData);
+        console.log(userData)
+      }catch(error){
+        console.log(error);
+      } }
+
+      fetchUserInfo();
+    },[])
+
+    useEffect(()=>{
+      if (!user || !user.profile_image) return;
+      const getUserProfileImage= async ()=>{
+        const ProfileImageUrl=await fetchImageUrl(user.profile_image);
+        setUserProfileImage(ProfileImageUrl)
+      }
+      getUserProfileImage()
+    },[user])
+
     useEffect(() => {
         const fetchData = async () => {
           try {   
@@ -167,7 +198,7 @@ const HomePage=()=>{
       
     const handleViewPost=(e,post_id)=>{
         e.preventDefault()
-        nav(`/userposts/${post_id}`)
+        nav(`/userposts/${visitor}/${post_id}`)
     }
   
     // useEffect(()=>{

@@ -5,7 +5,7 @@ import "./UserProfile.css";
 import { useNavigate } from "react-router";
 
 const UserProfile=()=>{
-    const [user,setUser]=useState(null);
+    const [user,setUser]=useState();
     const {username} = useParams();
     const [loading,setLoading] = useState(true);               
     const [followResponse,setFollowResponse] = useState(false);

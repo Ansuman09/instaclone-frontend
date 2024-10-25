@@ -13,7 +13,6 @@ const FeedPage=()=>{
     const visitorUserId = localStorage.getItem('id');
     const [postsLoading,setPostsLoading] = useState(true);
 
-    const [userProfileImages,setUserProfileImages]=useState([]);
     const [postImages,setPostImages]=useState([]);
     const [likeStatus,setLikeStatus] = useState();
     const [commentStatus,setCommentStatus] = useState();
@@ -52,7 +51,6 @@ const FeedPage=()=>{
     useEffect(()=>{
 
         // const token = sessionStorage.getItem('token')
-        const userid = localStorage.getItem('id');
 
         fetch(`http://localhost:8080/posts/feed`,{
             method: 'GET',
@@ -151,7 +149,7 @@ const FeedPage=()=>{
         setEnhance(true);
     }
 
-    const handleCommentSubmit=(e,visitorUserId,post_id)=>{
+    const handleCommentSubmit=(e,post_id)=>{
         e.preventDefault();
         if (currentlyEditingPostId===post_id){
         console.log(e);
@@ -206,7 +204,7 @@ const FeedPage=()=>{
                         <div className="post-description">
                         <p><b>{post.userinfo.username}</b>  {post.description}</p>
                         </div>
-                        <form className={`comment ${enhance && post.post_id===currentlyEditingPostId ? 'enhance' : ''}`} onSubmit={(e)=>{handleCommentSubmit(e,visitorUserId,post.post_id);setCommentStatus(true)}} >
+                        <form className={`comment ${enhance && post.post_id===currentlyEditingPostId ? 'enhance' : ''}`} onSubmit={(e)=>{handleCommentSubmit(e,post.post_id);setCommentStatus(true)}} >
                             <input placeholder="Write Something" onClick={(e)=>{setComment(e.target.value)}} onChange={(e)=>{setComment(e.target.value);setPrevPostId(post.post_id)}} value={post.post_id == currentlyEditingPostId ? comment:''}></input>
                             <button type="submit" ><FontAwesomeIcon icon={faArrowRight}/></button>
                         </form>
