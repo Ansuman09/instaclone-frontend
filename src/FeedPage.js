@@ -10,7 +10,6 @@ const FeedPage=()=>{
     const [posts,setPosts] = useState([]);
     const [loading,setLoading] = useState(true);
     const token = localStorage.getItem('token');
-    const visitorUserId = localStorage.getItem('id');
     const [postsLoading,setPostsLoading] = useState(true);
 
     const [postImages,setPostImages]=useState([]);
@@ -153,11 +152,11 @@ const FeedPage=()=>{
         e.preventDefault();
         if (currentlyEditingPostId===post_id){
         console.log(e);
-        console.log(comment,visitorUserId,post_id);
+        console.log(comment,post_id);
         
         const datatosend={
             post_id:post_id,
-            usr_id:visitorUserId,
+            usr_id:0,
             comment:comment
         }
         const submitComment=async()=>{
