@@ -68,6 +68,7 @@ const UserLogin = () => {
             console.log("Authentication successful:", token);
             setIsAuth(true);
             localStorage.setItem('token', token);
+            localStorage.setItem('visitor',username);
             setErrorMessage(""); // Clear any previous error message on success
 
             // Optionally, redirect user to another page after successful login

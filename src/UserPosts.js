@@ -15,16 +15,14 @@ const UserPosts=()=>{
     const [postImages,setPostImages]=useState([]);
     const {username,q}=useParams();
     const [currPost,setCurrPost]=useState(q);
-    const [userProfileId,setUserProfileId]=useState();
     const [likeStatus,setLikeStatus]=useState();
     const [commentStatus,setCommentStatus]=useState(false);
     const [comment,setComment]=useState();
     const [editComment,setEditComment]=useState(1000);
     const [editCommentToSend,setEditCommentToSend]=useState();
-    const [displayImageData,setDisplayImageData]=useState();
     const visitorUserId = localStorage.getItem('id')
     const token = localStorage.getItem('token')
-        
+    const visitorName=localStorage.getItem('visitor');
 
 
     const handleNextPost=(index)=>{
@@ -46,15 +44,15 @@ const UserPosts=()=>{
 
     }  
 
-    const handleCommentSubmit=(e,visitorUserId,post_id)=>{
+    const handleCommentSubmit=(e,post_id)=>{
       e.preventDefault();
       
       console.log(e);
-      console.log(comment,visitorUserId,post_id);
+      console.log(comment,post_id);
       
       const datatosend={
           post_id:post_id,
-          usr_id:visitorUserId,
+          usr_id:0,
           comment:comment
       }
       const submitComment=async()=>{
@@ -74,7 +72,7 @@ const UserPosts=()=>{
       
     }
 
-    const handleLike=async(user_who_liked_id,liked_post_id)=>{
+    const handleLike=async(liked_post_id)=>{
 
       // setLikeStatus({post_id:liked_post_id,liked:true})
       const json_body={
@@ -83,7 +81,7 @@ const UserPosts=()=>{
       }
 
       try {
-          const request = await fetch(`http://localhost:8080/action/add/${user_who_liked_id}`,{
+          const request = await fetch(`http://localhost:8080/action/add`,{
               method:'POST',
               headers: {
                   'Content-Type':'application/json',
@@ -101,11 +99,11 @@ const UserPosts=()=>{
       }
   }
 
-    const handleUnlike=async(user_who_liked_id,liked_post_id)=>{
+    const handleUnlike=async(liked_post_id)=>{
 
       // setLikeStatus({post_id:liked_post_id,liked:false})
       try {
-      const request = await fetch(`http://localhost:8080/action/delete/${liked_post_id}/${user_who_liked_id}`,{
+      const request = await fetch(`http://localhost:8080/action/delete/${liked_post_id}`,{
       method: 'DELETE',
       headers : {
       'Content-type':'application/json',
@@ -179,28 +177,9 @@ const UserPosts=()=>{
     useEffect(() => {
         const fetchData = async () => {
           try {
-            // Fetch visitor info
-            
-            //Fetch userprofile info
-            const responseToGetProfileUserId=await fetch(`http://localhost:8080/userinfo/getuserid/forHome/${username}`,{
-              method: "GET",
-              headers: {
-                "Content-type": "application/json",
-                Authorization: `Bearer ${token}`
-              }
-            });
-  
-            if (!responseToGetProfileUserId){
-                throw new Error("Unable to retrieve user");
-            }
-
-            const profileUserIdData=await responseToGetProfileUserId.json();
-            setUserProfileId(profileUserIdData);
-
-
 
             // Fetch posts data
-            const responseToGetPostsData = await fetch(`http://localhost:8080/posts/home/${profileUserIdData.usr_id}/${visitorUserId}`, {
+            const responseToGetPostsData = await fetch(`http://localhost:8080/posts/home/${username}`, {
               method: "GET",
               headers: {
                 "Content-Type": "application/json",
@@ -221,7 +200,6 @@ const UserPosts=()=>{
             console.log(posts)
           } catch (error) {
             console.error("Error fetching data:", error);
-            // Handle errors (e.g., show error message to user, retry logic, etc.)
           }
         };
 
@@ -229,7 +207,7 @@ const UserPosts=()=>{
         fetchData().then(()=>{
             // setLikeStatus()
             // console.log(posts)
-        }); // Invoke the async function
+        }); 
         
       }, [likeStatus,commentStatus]); 
 
@@ -307,11 +285,11 @@ const UserPosts=()=>{
                   {/* <p>{}</p> */}
                   {postImages.filter(image=>image.post_id==post.post_id).map(image=><img src={image.imageUrl}></img>)}
                   <div className="post-actions">
-                          <button id={post.post_id} className={post.hasLiked? "liked-button":"unliked-button"} onClick={post.hasLiked ? ()=>handleUnlike(visitorUserId,post.post_id) : ()=>handleLike(visitorUserId,post.post_id)}><FontAwesomeIcon className="j" icon={faHeart}/></button>
+                          <button id={post.post_id} className={post.hasLiked? "liked-button":"unliked-button"} onClick={post.hasLiked ? ()=>handleUnlike(post.post_id) : ()=>handleLike(post.post_id)}><FontAwesomeIcon className="j" icon={faHeart}/></button>
                           <p>  {post.actions.length}</p>
                       {/*    <button id={post.post_id} type="button" className={`comment-btn`} onClick={()=>{handleComment();setCurrentlyEditingPostId(post.post_id),setComment('');if(prevPostId===post.post_id){setEnhance(false),setPrevPostId(null)}}}><FontAwesomeIcon icon={faComment}/></button> */}
                         </div>
-                         <form className='comment enhance' onSubmit={(e)=>{handleCommentSubmit(e,visitorUserId,post.post_id);setCommentStatus(true)}} >
+                         <form className='comment enhance' onSubmit={(e)=>{handleCommentSubmit(e,post.post_id);setCommentStatus(true)}} >
                             <input placeholder="Write Something" value={comment} onClick={()=>setCommentStatus(false)}  onChange={(e)=>{setComment(e.target.value)}} ></input>
                             <button type="submit" ><FontAwesomeIcon icon={faArrowRight}/></button>
                         </form>
@@ -323,8 +301,8 @@ const UserPosts=()=>{
                         <div className='view-comments enhance'>
                             {post.comments.map(comment=>(
                                 <div>
-                                {visitorUserId==parseInt(comment.usr_id,10) ? <a onClick={()=>{setEditComment(parseInt(comment.comment_id,10)),setEditCommentToSend(comment.comment)}}>edit </a> : console.log(`user id visitor ${visitorUserId} comment user id ${comment.usr_id}`)}  
-                                {editComment===parseInt(comment.comment_id,10) ? (
+                                {visitorName===comment.userinfo.username ? <a onClick={()=>{setEditComment(parseInt(comment.comment_id,10)),setEditCommentToSend(comment.comment),console.log("name matched")}}>edit </a> : console.log(`user id visitor`)}  
+                                { editComment==comment.comment_id ? (
                                   <form className='comment enhance' onSubmit={(e)=>handleEditCommentSubmit(e,comment.comment_id)}>
                                   <input value={editCommentToSend} onChange={(e)=>{setEditCommentToSend(e.target.value)}}></input>
                                   <button type="submit" ><FontAwesomeIcon icon={faArrowRight}/></button>
