@@ -1,16 +1,17 @@
 .home-posts-container{
-    display: grid;
+    display: flex;
     margin-left: 350px;
-    column-gap: 5px;
-    row-gap: 5px;
+    flex-wrap: wrap;
+    list-style: none;
     grid-template-columns: repeat(3, 1fr);
 }
 
 
 .home-posts-container .post-container {
+    flex: 0 0 30%;
     width: 240px;
     height: 240px;
-    margin: 1px;
+    margin: 2px;
     padding: 3px;
 }
 
