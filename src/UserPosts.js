@@ -274,8 +274,6 @@ const UserPosts=()=>{
         return(
             
             <div className="user-posts-container">
-            {/* <h3>This is  a user Posts page to view posts by per user</h3> */}
-            {/* <p>{}</p> */}
             <div >
                 {posts.map((post,index)=>{
                   console.log(post)

@@ -9,13 +9,18 @@ const NavBar = () => {
     const userid = localStorage.getItem('id');
     const token = localStorage.getItem('token');
     const [showNav,setShowNav]=useState(false);
+    const currentPath = location.pathname;
     const handleHomeNavigation = () => {
         nav('/homepage');
     };
 
     const handleSearch = (e) => {
-        e.preventDefault();
-        nav(`/search/${encodeURIComponent(searchString)}`);
+        if (currentPath==`/search/${encodeURIComponent(searchString)}`){
+            window.location.reload();
+        }else{
+            nav(`/search/${encodeURIComponent(searchString)}`);
+        }
+        
     };
 
     const handleShowLink=()=>{
