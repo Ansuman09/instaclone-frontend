@@ -6,6 +6,8 @@ const UploadPage = () => {
     const [description, setDescription] = useState('');
     const token = "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJLeWxpYW5NIiwiZXhwIjoxNzE5MDgxNzQyfQ.UujvYMf1uC8YxyZAvpVmLlJ8z4VwKkTuGa2r1dQcHYTeldLIhuAEJSayZEQEtGqK9sk2k6VnZnNeLyDWshoOXQ"; // Replace with your actual token
 
+    const apiUrl = process.env.REACT_APP_API_URL;
+
     const handleSubmit = async (event) => {
         event.preventDefault();
         const data = {
@@ -15,7 +17,7 @@ const UploadPage = () => {
         };
 
         try {
-            const response = await fetch('http://localhost:8080/posts/addpost', {
+            const response = await fetch(`${apiUrl}/posts/addpost`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

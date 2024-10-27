@@ -5,7 +5,9 @@ const UserLogin = () => {
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
     const [errorMessage, setErrorMessage] = useState("");
-    const [isAuth, setIsAuth] = useState(false); // Use boolean false instead of "false"
+    const [isAuth, setIsAuth] = useState(false); 
+    const apiUrl = process.env.REACT_APP_API_URL;
+
     const nav = useNavigate();
 
     useEffect(() => {
@@ -13,7 +15,7 @@ const UserLogin = () => {
             if (isAuth) {
                 try {
                     const token = localStorage.getItem('token');
-                    const response = await fetch(`http://localhost:8080/userinfo/getuserid/forlogin/${username}`, {
+                    const response = await fetch(`${apiUrl}/userinfo/getuserid/forlogin/${username}`, {
                         method: 'GET',
                         headers: {
                             'Content-Type': 'application/json',
@@ -46,7 +48,7 @@ const UserLogin = () => {
         const data = { username: username, password: password };
 
         try {
-            const response = await fetch("http://localhost:8080/authenticate", {
+            const response = await fetch(`${apiUrl}/authenticate`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -66,6 +68,7 @@ const UserLogin = () => {
 
             const token = authHeader.split(' ')[1];
             console.log("Authentication successful:", token);
+            console.log(apiUrl)
             setIsAuth(true);
             localStorage.setItem('token', token);
             localStorage.setItem('visitor',username);

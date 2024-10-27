@@ -20,9 +20,12 @@ const UserPosts=()=>{
     const [comment,setComment]=useState();
     const [editComment,setEditComment]=useState(1000);
     const [editCommentToSend,setEditCommentToSend]=useState();
-    const visitorUserId = localStorage.getItem('id')
+    
     const token = localStorage.getItem('token')
     const visitorName=localStorage.getItem('visitor');
+
+    const apiUrl = process.env.REACT_APP_API_URL;
+
 
 
     const handleNextPost=(index)=>{
@@ -56,7 +59,7 @@ const UserPosts=()=>{
           comment:comment
       }
       const submitComment=async()=>{
-          await fetch('http://localhost:8080/comment/add',{
+          await fetch(`${apiUrl}/comment/add`,{
               method:'POST',
               headers:{
                   'Content-type':'application/json',
@@ -81,7 +84,7 @@ const UserPosts=()=>{
       }
 
       try {
-          const request = await fetch(`http://localhost:8080/action/add`,{
+          const request = await fetch(`${apiUrl}/action/add`,{
               method:'POST',
               headers: {
                   'Content-Type':'application/json',
@@ -103,7 +106,7 @@ const UserPosts=()=>{
 
       // setLikeStatus({post_id:liked_post_id,liked:false})
       try {
-      const request = await fetch(`http://localhost:8080/action/delete/${liked_post_id}`,{
+      const request = await fetch(`${apiUrl}/action/delete/${liked_post_id}`,{
       method: 'DELETE',
       headers : {
       'Content-type':'application/json',
@@ -131,7 +134,7 @@ const UserPosts=()=>{
           comment:editCommentToSend
       }
       const submitComment=async()=>{
-          await fetch(`http://localhost:8080/comment/edit_this_comment`,{
+          await fetch(`${apiUrl}/comment/edit_this_comment`,{
               method:'POST',
               headers:{
                   'Content-type':'application/json',
@@ -151,7 +154,7 @@ const UserPosts=()=>{
       const fetchImageUrl = async (imageName) => {
         console.log("Called image data");
         try {
-          const response = await fetch(`http://localhost:8080/get-images/images/${imageName}`, {
+          const response = await fetch(`${apiUrl}/get-images/images/${imageName}`, {
             method: 'GET',
             headers: {
               'Content-Type': 'application/json',
@@ -179,7 +182,7 @@ const UserPosts=()=>{
           try {
 
             // Fetch posts data
-            const responseToGetPostsData = await fetch(`http://localhost:8080/posts/home/${username}`, {
+            const responseToGetPostsData = await fetch(`${apiUrl}/posts/home/${username}`, {
               method: "GET",
               headers: {
                 "Content-Type": "application/json",
@@ -214,7 +217,7 @@ const UserPosts=()=>{
     useEffect(() => {
     const fetchImageData = async () => {
       try {
-        const responseToGetImagesByOwner = await fetch(`http://localhost:8080/postimages/all/${username}`, {
+        const responseToGetImagesByOwner = await fetch(`${apiUrl}/postimages/all/${username}`, {
           method: "GET",
           headers: {
             "Content-type": "application/json",

@@ -16,12 +16,15 @@ const SearchPage=()=>{
         const [postLoading,setPostLoading]=useState(true);
         const [postData,setPostData]=useState([]);
         const token = localStorage.getItem('token');
+
+        const apiUrl = process.env.REACT_APP_API_URL;
+
                         
 
         const fetchImageUrl = async (imageName) => {
             console.log("Called image data");
             try {
-              const response = await fetch(`http://localhost:8080/get-images/images/${imageName}`, {
+              const response = await fetch(`${apiUrl}/get-images/images/${imageName}`, {
                 method: 'GET',
                 headers: {
                   'Content-Type': 'application/json',
@@ -48,7 +51,7 @@ const SearchPage=()=>{
                     try {
                         const search_string = encodeURIComponent(q);
                         console.log(q)
-                        const response = await fetch(`http://localhost:8080/userinfo/all/${search_string}`, {
+                        const response = await fetch(`${apiUrl}/userinfo/all/${search_string}`, {
                             method: 'GET',
                             headers: {
                                 'Content-type': 'application/json',
@@ -99,7 +102,7 @@ const SearchPage=()=>{
             
             const fetchPostsData = async () => {
                 try {
-                    const response = await fetch(`http://localhost:8080/posts/home/search/${q}`, {
+                    const response = await fetch(`${apiUrl}/posts/home/search/${q}`, {
                         method: 'GET',
                         headers: {
                             'Content-type': 'application/json',

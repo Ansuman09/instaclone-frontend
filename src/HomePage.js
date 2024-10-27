@@ -17,6 +17,9 @@ const HomePage=()=>{
     const [postsLoading,setPostsLoading]=useState(true);
     const [postImages,setPostImages]=useState([]);    
     const token = localStorage.getItem('token')
+
+    const apiUrl = process.env.REACT_APP_API_URL;
+
     
     const visitor = localStorage.getItem('visitor');
     const nav = useNavigate();
@@ -24,7 +27,7 @@ const HomePage=()=>{
     useEffect(()=>{
       const fetchUserInfo= async()=> {
         try {
-        const response=await fetch("http://localhost:8080/userinfo/image",{
+        const response=await fetch(`${apiUrl}/userinfo/image`,{
           method:"GET",
           headers: {
             "Content-Type": "application/json",
@@ -57,7 +60,7 @@ const HomePage=()=>{
           try {   
             
             // Fetch posts data
-            const response2 = await fetch(`http://localhost:8080/posts/home`, {
+            const response2 = await fetch(`${apiUrl}/posts/home`, {
               method: "GET",
               headers: {
                 "Content-Type": "application/json",
@@ -72,7 +75,7 @@ const HomePage=()=>{
             const postsData = await response2.json();
             setPosts(postsData);
             
-            const responseToGetFollowers= await fetch(`http://localhost:8080/followers/userfollowers`,{
+            const responseToGetFollowers= await fetch(`${apiUrl}/followers/userfollowers`,{
               method:'GET',
               headers: {
                 "Content-Type": "application/json",
@@ -89,7 +92,7 @@ const HomePage=()=>{
 
             // console.log(responseToGetFollowers)
 
-            const responseToGetFollowing= await fetch(`http://localhost:8080/followers/following`,{
+            const responseToGetFollowing= await fetch(`${apiUrl}/followers/following`,{
               method:'GET',
               headers: {
                 "Content-Type": "application/json",
@@ -121,7 +124,7 @@ const HomePage=()=>{
       useEffect(() => {
         const fetchImageData = async () => {
           try {
-            const responseToGetImagesByOwner = await fetch(`http://localhost:8080/postimages/all`, {
+            const responseToGetImagesByOwner = await fetch(`${apiUrl}/postimages/all`, {
               method: "GET",
               headers: {
                 "Content-type": "application/json",
@@ -151,7 +154,7 @@ const HomePage=()=>{
       const fetchImageUrl = async (imageName) => {
         console.log("Called image data");
         try {
-          const response = await fetch(`http://localhost:8080/get-images/images/${imageName}`, {
+          const response = await fetch(`${apiUrl}/get-images/images/${imageName}`, {
             method: 'GET',
             headers: {
               'Content-Type': 'application/json',

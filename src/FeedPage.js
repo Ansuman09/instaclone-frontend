@@ -20,11 +20,13 @@ const FeedPage=()=>{
     const [currentlyEditingPostId,setCurrentlyEditingPostId]=useState();
     const [prevPostId,setPrevPostId]=useState();
 
+    const apiUrl = process.env.REACT_APP_API_URL;
+
     //this function gets images from names
     const fetchImageUrl = async (imageName) => {
         console.log("Called image data");
         try {
-          const response = await fetch(`http://localhost:8080/get-images/images/${imageName}`, {
+          const response = await fetch(`${apiUrl}/get-images/images/${imageName}`, {
             method: 'GET',
             headers: {
               'Content-Type': 'application/json',
@@ -51,7 +53,7 @@ const FeedPage=()=>{
 
         // const token = sessionStorage.getItem('token')
 
-        fetch(`http://localhost:8080/posts/feed`,{
+        fetch(`${apiUrl}/posts/feed`,{
             method: 'GET',
             headers:{
                 'Content-Type':'application/json',
@@ -109,7 +111,7 @@ const FeedPage=()=>{
         }
 
         try {
-            const request = await fetch(`http://localhost:8080/action/add`,{
+            const request = await fetch(`${apiUrl}/action/add`,{
                 method:'POST',
                 headers: {
                     'Content-Type':'application/json',
@@ -128,7 +130,7 @@ const FeedPage=()=>{
 
     const handleUnlike=async(liked_post_id)=>{
         try {
-        const request = await fetch(`http://localhost:8080/action/delete/${liked_post_id}`,{
+        const request = await fetch(`${apiUrl}/action/delete/${liked_post_id}`,{
         method: 'DELETE',
         headers : {
         'Content-type':'application/json',
@@ -160,7 +162,7 @@ const FeedPage=()=>{
             comment:comment
         }
         const submitComment=async()=>{
-            await fetch('http://localhost:8080/comment/add',{
+            await fetch(`${apiUrl}/comment/add`,{
                 method:'POST',
                 headers:{
                     'Content-type':'application/json',

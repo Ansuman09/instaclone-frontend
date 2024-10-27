@@ -22,12 +22,14 @@ const UserProfile=()=>{
     const visitorUserId = localStorage.getItem('id')
     const token = localStorage.getItem('token')
             
+    const apiUrl = process.env.REACT_APP_API_URL;
+
     const nav = useNavigate();
 
     const fetchImageUrl = async (imageName) => {
         console.log("Called image data");
         try {
-          const response = await fetch(`http://localhost:8080/get-images/images/${imageName}`, {
+          const response = await fetch(`${apiUrl}/get-images/images/${imageName}`, {
             method: 'GET',
             headers: {
               'Content-Type': 'application/json',
@@ -54,7 +56,7 @@ const UserProfile=()=>{
         const fetchUserData = async () => {
             try {
                 // Fetch user info
-                const responseToGetProfileUserData = await fetch(`http://localhost:8080/userinfo/${username}/${visitorUserId}`, {
+                const responseToGetProfileUserData = await fetch(`${apiUrl}/userinfo/${username}/${visitorUserId}`, {
                     method: 'GET',
                     headers: {
                         "Content-Type": "application/json",
@@ -85,7 +87,7 @@ const UserProfile=()=>{
 
             try {
                 // Fetch posts data
-                const responseToGetPosts = await fetch(`http://localhost:8080/posts/home/${username}`, {
+                const responseToGetPosts = await fetch(`${apiUrl}/posts/home/${username}`, {
                     method: "GET",
                     headers: {
                         "Content-Type": "application/json",
@@ -101,7 +103,7 @@ const UserProfile=()=>{
                 setPosts(postsData);
                 setPostsLoading(false);
                 // Fetch followers data
-                const responseToGetFollowers = await fetch(`http://localhost:8080/followers/userfollowers/${username}`, {
+                const responseToGetFollowers = await fetch(`${apiUrl}/followers/userfollowers/${username}`, {
                     method: 'GET',
                     headers: {
                         "Content-Type": "application/json",
@@ -117,7 +119,7 @@ const UserProfile=()=>{
                 setFollowers(followersData);
 
                 // Fetch following data
-                const responseToGetFollowing = await fetch(`http://localhost:8080/followers/following/${username}`, {
+                const responseToGetFollowing = await fetch(`${apiUrl}/followers/following/${username}`, {
                     method: 'GET',
                     headers: {
                         "Content-Type": "application/json",
@@ -147,7 +149,7 @@ const UserProfile=()=>{
     useEffect(() => {
         const fetchImageData = async () => {
           try {
-            const responseToGetImagesByOwner = await fetch(`http://localhost:8080/postimages/all/${username}`, {
+            const responseToGetImagesByOwner = await fetch(`${apiUrl}/postimages/all/${username}`, {
               method: "GET",
               headers: {
                 "Content-type": "application/json",
@@ -206,7 +208,7 @@ const UserProfile=()=>{
         };
         console.log(data)
         try{
-        await fetch("http://localhost:8080/followers/add",{
+        await fetch(`${apiUrl}/followers/add`,{
             method:'POST',
             headers:{
                 'Content-type':'application/json',
@@ -229,7 +231,7 @@ const UserProfile=()=>{
         };
         console.log(data)
         try{
-        await fetch("http://localhost:8080/followers/delete",{
+        await fetch(`${apiUrl}/followers/delete`,{
             method:'DELETE',
             headers:{
                 'Content-type':'application/json',
