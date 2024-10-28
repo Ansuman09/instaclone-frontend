@@ -7,6 +7,7 @@ const SignupPage= () => {
     const [password, setPassword] = useState("");
     const [email,setEmail]=useState("");
     const [errorMessage, setErrorMessage] = useState(null);
+    const apiUrl = process.env.REACT_APP_API_URL;
     
     const nav = useNavigate();
 
@@ -23,7 +24,7 @@ const SignupPage= () => {
 
         if (errorMessage===null){
         try{
-        const response = await fetch("http://localhost:8080/user/register",{
+        const response = await fetch(`${apiUrl}/user/register`,{
             method:'POST',
             headers: {'Content-type':'application/json'},
             body: JSON.stringify(data)

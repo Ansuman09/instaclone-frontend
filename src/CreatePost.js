@@ -11,6 +11,8 @@ const CreatePost=()=>{
     const [description,setDescription]=useState("");
     const token = localStorage.getItem('token')
 
+    const apiUrl = process.env.REACT_APP_API_URL;
+
     const handleImageSelection=(imageFile)=>{
         setImage(URL.createObjectURL(imageFile))
         console.log(imageFile.name)
@@ -30,7 +32,7 @@ const CreatePost=()=>{
         formData.append("image", imageFileToSend);  // Append the file
     
         try {
-            await fetch("http://localhost:8080/posts/addpost", {
+            await fetch(`${apiUrl}/posts/addpost`, {
                 method: 'POST',
                 headers: {
                     Authorization: `Bearer ${token}`  // Do not set Content-type header manually here!
