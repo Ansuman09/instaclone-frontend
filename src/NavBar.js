@@ -35,6 +35,9 @@ const NavBar = () => {
         nav("/addpost")
     }
 
+    const handleEditProfile=()=>{
+        nav("/editprofile")
+    }
     
     const handleLogout=()=>{
         localStorage.clear()
@@ -64,6 +67,9 @@ const NavBar = () => {
                 <button type="button" onClick={handlePostView}><FontAwesomeIcon icon={faCamera}/> Post</button>
                 <br />
                 <button type="button" name="Logout" onClick={handleLogout}><FontAwesomeIcon icon={faRightFromBracket}/> Logout</button>
+                <br />
+                <button type="button" name="Logout" onClick={handleEditProfile}><FontAwesomeIcon icon={faRightFromBracket}/> Profile</button>
+
             </ul>
         </div>
         </div>

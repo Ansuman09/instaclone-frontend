@@ -9,6 +9,7 @@ import UserProfile from './UserProfile';
 import SignupPage from './SignupPage';
 import CreatePost from './CreatePost';
 import UserPosts from './UserPosts';
+import editProfile from './EditProfile';
 
 const App = () => {
     return (
@@ -22,6 +23,7 @@ const App = () => {
                     <Route path="/userprofile/:username" Component={UserProfile}/>
                     <Route path='/signup' Component={SignupPage} />
                     <Route path='/addpost' Component={CreatePost} />
+                    <Route path='/editprofile' Component={editProfile}/>
                     <Route path='/userposts/:username/:q' Component={UserPosts} />
               </Routes>
                 </div>
