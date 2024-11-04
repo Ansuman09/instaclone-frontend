@@ -77,6 +77,10 @@ const editProfile=()=>{
         console.log(userDataToSend);
     }
 
+    const handleUsernameUpdate=()=>{
+      console.log(userDataToSend)
+    }
+
     return(
     <div>
          <div style={{'padding-bottom':'120px'}}>
@@ -84,14 +88,15 @@ const editProfile=()=>{
               
         </div>
         <div style={{paddingLeft:300}}>
-        <form className="edit-profile-form">
+        <div className="edit-profile-form">
             {!changeProfileImage && <button type="button" onClick={()=>{setChangeProfileImage(true)}}>Change Profile Pic</button>}
             {changeProfileImage && <input type="file" onChange={(e)=>handleFileUpload(e.target.files[0])} />}
             <p></p>
             <img src={userProfileImage} alt="Profile image"></img>
             <p>Username: </p>
             <input value={userDataToSend.username} onChange={(e)=>setUserDataToSend({...userDataToSend,username:e.target.value})}></input>
-        </form>
+            <button type="button" onClick={()=>handleUsernameUpdate()}>update</button>
+        </div>
         <p>edit profile here</p>
         </div>
     </div>)
