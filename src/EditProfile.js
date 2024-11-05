@@ -2,11 +2,14 @@ import React from "react";
 import NavBar from "./NavBar";
 import { useState,useEffect } from "react";
 import "./EditProfile.css";
+import { useNavigate } from "react-router";
 
 const editProfile=()=>{
 
     const apiUrl = process.env.REACT_APP_API_URL;
     const token = localStorage.getItem('token');
+
+    const nav= useNavigate();
     const [user,setUser] = useState({});
     const [userProfileImage,setUserProfileImage]=useState();
     const [changeProfileImage,setChangeProfileImage]=useState(false);
@@ -77,9 +80,32 @@ const editProfile=()=>{
         console.log(userDataToSend);
     }
 
-    const handleUsernameUpdate=()=>{
-      console.log(userDataToSend)
-    }
+    const handleUsernameUpdate = async () => {
+      
+      try {
+        const response = await fetch(`${apiUrl}/userinfo/update/name`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify({username:userDataToSend.username,profile_image:userDataToSend.profile_image}),  // Ensure that the body is properly serialized
+        });
+
+        if (response.ok) {
+          console.log('User name updated successfully:');
+          localStorage.clear();
+          nav("/");
+        } else {
+          const errorData = await response.json();
+          console.error('Error updating name:', errorData);
+        }
+      } catch (e) {
+        console.error('Unable to update name:', e);
+      }
+    };
+
+
 
     return(
     <div>
@@ -95,7 +121,7 @@ const editProfile=()=>{
             <img src={userProfileImage} alt="Profile image"></img>
             <p>Username: </p>
             <input value={userDataToSend.username} onChange={(e)=>setUserDataToSend({...userDataToSend,username:e.target.value})}></input>
-            <button type="button" onClick={()=>handleUsernameUpdate()}>update</button>
+            <button type="button" onClick={handleUsernameUpdate}>update</button>
         </div>
         <p>edit profile here</p>
         </div>
