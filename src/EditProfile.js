@@ -13,6 +13,7 @@ const editProfile=()=>{
     const [user,setUser] = useState({});
     const [userProfileImage,setUserProfileImage]=useState();
     const [changeProfileImage,setChangeProfileImage]=useState(false);
+    const [updloadedImage,setUploadedImage]=useState();
     const [userDataToSend,setUserDataToSend]=useState({});
 
     const fetchImageUrl = async (imageName) => {
@@ -75,10 +76,44 @@ const editProfile=()=>{
     const handleFileUpload=(imageFile)=>{
         const image=URL.createObjectURL(imageFile);
         console.log(imageFile.name);
+        setUploadedImage(imageFile);
         setUserProfileImage(image);
         setUserDataToSend({...userDataToSend,profile_image:imageFile.name})    
         console.log(userDataToSend);
     }
+
+    const handleImageUpdate =async()=>{
+        
+        if (!updloadedImage) {
+            console.log("No image selected");
+            return;
+        }
+    
+        const formData = new FormData();
+        formData.append("image", updloadedImage);  // Append the file
+    
+        try {
+            const response=await fetch(`${apiUrl}/userinfo/update/image`, {
+                method: 'POST',
+                headers: {
+                    Authorization: `Bearer ${token}`  
+                },
+                body: formData  // Send FormData, not JSON
+            });
+            console.log("Post successfully created!");
+          
+            if (response.ok){
+              setUploadedImage();
+            }
+        } catch (e) {
+            console.log(e);
+            throw new Error("Unable to send data");
+        }
+        
+        setChangeProfileImage(false);
+        
+    
+    };
 
     const handleUsernameUpdate = async () => {
       
@@ -118,6 +153,7 @@ const editProfile=()=>{
             {!changeProfileImage && <button type="button" onClick={()=>{setChangeProfileImage(true)}}>Change Profile Pic</button>}
             {changeProfileImage && <input type="file" onChange={(e)=>handleFileUpload(e.target.files[0])} />}
             <p></p>
+            {updloadedImage && <button type="button" onClick={handleImageUpdate}>update Image</button>}
             <img src={userProfileImage} alt="Profile image"></img>
             <p>Username: </p>
             <input value={userDataToSend.username} onChange={(e)=>setUserDataToSend({...userDataToSend,username:e.target.value})}></input>
