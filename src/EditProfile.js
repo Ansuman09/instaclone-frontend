@@ -3,7 +3,8 @@ import NavBar from "./NavBar";
 import { useState,useEffect } from "react";
 import "./EditProfile.css";
 import { useNavigate } from "react-router";
-
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faArrowCircleRight, faCheckCircle, faImagePortrait } from "@fortawesome/free-solid-svg-icons";
 const editProfile=()=>{
 
     const apiUrl = process.env.REACT_APP_API_URL;
@@ -150,16 +151,18 @@ const editProfile=()=>{
         </div>
         <div style={{paddingLeft:300}}>
         <div className="edit-profile-form">
-            {!changeProfileImage && <button type="button" onClick={()=>{setChangeProfileImage(true)}}>Change Profile Pic</button>}
+            {!changeProfileImage && <button type="button" className="update-image" onClick={()=>{setChangeProfileImage(true)}}><FontAwesomeIcon icon={faImagePortrait}/></button>}
             {changeProfileImage && <input type="file" onChange={(e)=>handleFileUpload(e.target.files[0])} />}
+            {updloadedImage && <button type="button" className="confirm-image" onClick={handleImageUpdate}><FontAwesomeIcon icon={faCheckCircle}/></button>}
+            
             <p></p>
-            {updloadedImage && <button type="button" onClick={handleImageUpdate}>update Image</button>}
             <img src={userProfileImage} alt="Profile image"></img>
+            <p></p>
+            
             <p>Username: </p>
             <input value={userDataToSend.username} onChange={(e)=>setUserDataToSend({...userDataToSend,username:e.target.value})}></input>
-            <button type="button" onClick={handleUsernameUpdate}>update</button>
+            <button type="button" className="update-username" onClick={handleUsernameUpdate}><FontAwesomeIcon icon={faArrowCircleRight}/></button>
         </div>
-        <p>edit profile here</p>
         </div>
     </div>)
 }

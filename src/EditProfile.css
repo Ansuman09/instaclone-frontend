@@ -1,4 +1,33 @@
 .edit-profile-form img{
     height: 200px;
     width: 180px;
+    border-radius: 3px;
+    border: solid black 0.2rem;
+
+}
+
+.update-username {
+    margin-left: 4px;
+    border-radius: 50%;
+    color: blue;
+    background-color: rgb(208, 234, 243);
+    cursor: pointer;   
+}
+
+.update-image {
+    font-size: 2rem;
+    color: green;
+    cursor: pointer;
+}
+
+.update-image:hover{
+    color: rgb(52, 243, 52);
+    background-color: black;
+    border-radius: 5px;
+}
+
+.confirm-image{
+    font-size: 1rem;
+    color: green;
+    border-radius: 50%;
 }

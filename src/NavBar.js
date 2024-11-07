@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router";
-import { faBars, faCamera, faRightFromBracket, faSquareRss } from "@fortawesome/free-solid-svg-icons";
+import { faBars, faCamera, faRightFromBracket, faSquareRss, faUserCircle } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 const NavBar = () => {
@@ -68,7 +68,7 @@ const NavBar = () => {
                 <br />
                 <button type="button" name="Logout" onClick={handleLogout}><FontAwesomeIcon icon={faRightFromBracket}/> Logout</button>
                 <br />
-                <button type="button" name="Logout" onClick={handleEditProfile}><FontAwesomeIcon icon={faRightFromBracket}/> Profile</button>
+                <button type="button" name="Logout" onClick={handleEditProfile}><FontAwesomeIcon icon={faUserCircle}/> Profile</button>
 
             </ul>
         </div>
