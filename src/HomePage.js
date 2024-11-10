@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import NavBar from "./NavBar";
 import "./HomePage.css";
 import { faRetweet } from "@fortawesome/free-solid-svg-icons";
+import { jwtDecode } from "jwt-decode";
 
 const HomePage=()=>{
 
@@ -16,7 +17,9 @@ const HomePage=()=>{
     const [userProfileImage,setUserProfileImage]=useState();
     const [postsLoading,setPostsLoading]=useState(true);
     const [postImages,setPostImages]=useState([]);    
-    const token = localStorage.getItem('token')
+    const token = localStorage.getItem('token');
+
+    const userRole=jwtDecode(token)
 
     const apiUrl = process.env.REACT_APP_API_URL;
 
@@ -221,7 +224,7 @@ const HomePage=()=>{
         return (
         <div>
             <div style={{'padding-bottom':'120px'}}>
-              <NavBar />
+              <NavBar role={userRole.roles[0]}/>
               
             </div>
             <div className="home-username">

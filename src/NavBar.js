@@ -1,14 +1,16 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router";
-import { faBars, faCamera, faRightFromBracket, faSquareRss, faUserCircle } from "@fortawesome/free-solid-svg-icons";
+import { faBars, faCamera, faRightFromBracket, faSquareRss, faUserCircle, faUserNinja } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { jwtDecode } from "jwt-decode";
 
-const NavBar = () => {
+const NavBar = (props) => {
     const [searchString, setSearchString] = useState("");
     const nav = useNavigate();
     const userid = localStorage.getItem('id');
     const token = localStorage.getItem('token');
     const [showNav,setShowNav]=useState(false);
+    
     const currentPath = location.pathname;
     const handleHomeNavigation = () => {
         nav('/homepage');
@@ -37,6 +39,7 @@ const NavBar = () => {
 
     const handleEditProfile=()=>{
         nav("/editprofile")
+        
     }
     
     const handleLogout=()=>{
@@ -68,8 +71,10 @@ const NavBar = () => {
                 <br />
                 <button type="button" name="Logout" onClick={handleLogout}><FontAwesomeIcon icon={faRightFromBracket}/> Logout</button>
                 <br />
-                <button type="button" name="Logout" onClick={handleEditProfile}><FontAwesomeIcon icon={faUserCircle}/> Profile</button>
+                <button type="button"  onClick={handleEditProfile}><FontAwesomeIcon icon={faUserCircle}/> Profile</button>
+                <br/>
 
+                {props.role=="ROLE_ADMIN" && <button type="button"><FontAwesomeIcon icon={faUserNinja}/> Secure</button>}
             </ul>
         </div>
         </div>
@@ -77,3 +82,4 @@ const NavBar = () => {
 };
 
 export default NavBar;
+ 
