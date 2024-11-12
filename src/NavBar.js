@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router";
-import { faBars, faCamera, faRightFromBracket, faSquareRss, faUserCircle, faUserNinja } from "@fortawesome/free-solid-svg-icons";
+import { faBars, faCamera, faRightFromBracket, faSquareRss, faUserAlt, faUserCircle, faUserLock, faUserNinja } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { jwtDecode } from "jwt-decode";
 
@@ -47,6 +47,9 @@ const NavBar = (props) => {
         nav('/');
     }
 
+    const handleAdminPage=()=>{
+        nav('/adminpage')}
+
     return (
         <div className="navbar">
         <div className="nav-container">
@@ -74,7 +77,7 @@ const NavBar = (props) => {
                 <button type="button"  onClick={handleEditProfile}><FontAwesomeIcon icon={faUserCircle}/> Profile</button>
                 <br/>
 
-                {props.role=="ROLE_ADMIN" && <button type="button"><FontAwesomeIcon icon={faUserNinja}/> Secure</button>}
+                {props.role=="ROLE_ADMIN" && <button type="button" onClick={handleAdminPage}><FontAwesomeIcon icon={faUserLock}/> Secure</button>}
             </ul>
         </div>
         </div>

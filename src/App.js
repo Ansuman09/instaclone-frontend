@@ -10,6 +10,7 @@ import SignupPage from './SignupPage';
 import CreatePost from './CreatePost';
 import UserPosts from './UserPosts';
 import editProfile from './EditProfile';
+import AdminController from './AdminController';
 
 const App = () => {
     return (
@@ -25,6 +26,7 @@ const App = () => {
                     <Route path='/addpost' Component={CreatePost} />
                     <Route path='/editprofile' Component={editProfile}/>
                     <Route path='/userposts/:username/:q' Component={UserPosts} />
+                    <Route path='/adminpage' Component={AdminController}/>
               </Routes>
                 </div>
         </Router>
