@@ -1,0 +1,35 @@
+.data-table-container{
+    padding-top: 50px;
+}
+
+.data-table{
+    white-space:none;
+}
+
+.data-table th{
+    background-color: #133E87;
+    color: white;
+    text-decoration-color: white;      
+    border: solid black 0.5px;
+    padding: 5px;
+}
+
+
+.data-table td{      
+    border: solid black 0.5px;
+    padding: 5px;
+}
+
+.delete-btn{
+    background-color: red;
+    color: white;
+    border-radius: 2px;
+    cursor: pointer;
+}
+
+.update-btn{
+    background-color: green;
+    color: white;
+    border-radius: 2px;
+    cursor: pointer;
+}
