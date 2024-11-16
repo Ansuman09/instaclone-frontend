@@ -1,12 +1,12 @@
 import { faAngleRight, faDeleteLeft, faEdit } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import NavBar from "./NavBar";
 import "./AdminController.css";
 
 const AdminController =()=>{
 
-    const [table,setTable]=useState();
+    const [table,setTable]=useState("posts");
     const [posts,setPosts]=useState({});
     const [actions,setActions]=useState({});
     const [loading,setLoading]=useState(true);
@@ -14,6 +14,33 @@ const AdminController =()=>{
     const token=localStorage.getItem('token');
 
     const apiUrl = process.env.REACT_APP_API_URL;
+
+    // useEffect(()=>{
+    //     if (table=="posts"){
+    //         const getPostsData=async ()=>{
+    //             const response = await fetch(`${apiUrl}/posts/all`,{
+    //                 method:"GET",
+    //                 headers: {
+    //                     "Content-Type": "application/json",
+    //                     Authorization: `Bearer ${token}`
+    //                   }
+
+    //             })
+
+    //             if (response.ok){
+    //                 const data = await response.json()
+    //                 setPosts(data);
+    //                 console.log(data)
+    //                 setLoading(false)
+    //             }
+                
+    //         }
+
+    //         getPostsData()  ;
+    //     }
+    //     console.log(table)
+
+    // },[])
 
     const handleFetchTableData=(e)=>{
         e.preventDefault();
@@ -66,6 +93,24 @@ const AdminController =()=>{
         }
     }
 
+    const handleDeletePost=async(e,post_id)=>{
+        handleFetchTableData(e);
+
+        const response=await fetch(`${apiUrl}/posts/delete/${post_id}`,{
+            method:"POST",
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+
+            
+        })
+        if (response.status==202){
+            handleFetchTableData(e);
+        }
+        
+
+    }
+
     return(
         <div>
             <NavBar />        
@@ -95,7 +140,7 @@ const AdminController =()=>{
                             <td>{post.post_id}</td>
                             <td>{post.owner_id}</td>
                             <td>{post.description}</td>
-                            <td><button type="button" className="delete-btn"><FontAwesomeIcon icon={faDeleteLeft}/> </button></td>
+                            <td><button type="button" className="delete-btn" onClick={(e)=>handleDeletePost(e,post.post_id)} ><FontAwesomeIcon icon={faDeleteLeft} /> </button></td>
                             <td><button type="button" className="update-btn"><FontAwesomeIcon icon={faEdit}/> </button></td>
                             </tr>))}
             </table>}
