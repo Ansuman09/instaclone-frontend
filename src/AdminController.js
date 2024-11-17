@@ -111,6 +111,22 @@ const AdminController =()=>{
 
     }
 
+    const handleDeleteAction=async(e,post_id,user_id)=>{
+        const response= await fetch(`${apiUrl}/action/delete/${post_id}/${user_id}`,{
+            method:"DELETE",
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+
+            
+        })
+        if (response.status==202){
+            handleFetchTableData(e);
+        }
+
+
+    }
+
     return(
         <div>
             <NavBar />        
@@ -156,7 +172,7 @@ const AdminController =()=>{
                             <td>{action.post_id}</td>
                             <td>{action.user_id}</td>
                             <td>{action.action}</td>
-                            <td><button type="button" className="delete-btn"><FontAwesomeIcon icon={faDeleteLeft}/> </button></td>
+                            <td><button type="button" className="delete-btn" onClick={(e)=>handleDeleteAction(e,action.post_id,action.user_id)}><FontAwesomeIcon icon={faDeleteLeft}/> </button></td>
                             <td><button type="button" className="update-btn"><FontAwesomeIcon icon={faEdit}/> </button></td>
                             
                         </tr>
