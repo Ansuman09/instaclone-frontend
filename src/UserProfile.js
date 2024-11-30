@@ -150,6 +150,7 @@ const UserProfile=()=>{
 
 
     useEffect(() => {
+        if (user) return;
         const fetchImageData = async () => {
           try {
             const responseToGetImagesByOwner = await fetch(`${apiUrl}/postimages/all/${username}`, {
@@ -177,11 +178,10 @@ const UserProfile=()=>{
     
         fetchImageData(); // Call the async function here
     
-      }, [userLoading]); // Dependency on token to ensure this runs when the token is available
+      }, []); // Dependency on token to ensure this runs when the token is available
     
         useEffect(() => {
-          if (postsLoading) return; // Exit early if loading is not finished
-    
+          if (postsLoading) return; 
           const update_posts = async () => {
             const postsDataWithImageUrl = await Promise.all(
               postImages.map(async (postImage) => {
@@ -199,7 +199,7 @@ const UserProfile=()=>{
           update_posts(); // Call the async function
           setLoading(false);
     
-        }, [postsLoading]); // Trigger when postImages or postsLoading changes
+        }, [posts]); 
           
         
     "----"
