@@ -4,20 +4,16 @@ import React from "react";
 import { useEffect,useState } from "react";
 import { faArrowRight, faHeart } from "@fortawesome/free-solid-svg-icons";
 import { faComment} from "@fortawesome/free-solid-svg-icons"
-import { useSelector,useDispatch } from "react-redux";
-import { setPosts,updatePostLikeCount,updateHasLikedPost,updateHasUnlikedPost,addUserComment } from "./features/Posts";
 
 import NavBar from "./NavBar";
 const FeedPage=()=>{
-    const postDispatch=useDispatch();
-    const posts=useSelector(state=>state.posts.value);
+    const [posts,setPosts] = useState([]);
     const [loading,setLoading] = useState(true);
     const token = localStorage.getItem('token');
     const [postsLoading,setPostsLoading] = useState(true);
-    
+
     const [postImages,setPostImages]=useState([]);
-    
-    const visitor=localStorage.getItem("visitor");
+    const [likeStatus,setLikeStatus] = useState();
     const [commentStatus,setCommentStatus] = useState();
     const [enhance,setEnhance] = useState(false);
     const [comment,setComment] = useState('');
@@ -71,12 +67,11 @@ const FeedPage=()=>{
             return response.json();
         })
         .then(data=>{
-            postDispatch(setPosts(data));
-            postDispatch(updatePostLikeCount());
+            setPosts(data)
             console.log(data)
             setPostsLoading(false);
         })
-    },[])
+    },[likeStatus,commentStatus])
 
     useEffect(() => {
         if (postsLoading) return; // Exit early if loading is not finished
@@ -114,8 +109,9 @@ const FeedPage=()=>{
             post_id:liked_post_id,
             action:"like"
         }
-        try{
-            const response = await fetch(`${apiUrl}/action/queue/useraction/addLike`,{
+
+        try {
+            const request = await fetch(`${apiUrl}/action/add`,{
                 method:'POST',
                 headers: {
                     'Content-Type':'application/json',
@@ -123,42 +119,40 @@ const FeedPage=()=>{
                 },
                 body: JSON.stringify(json_body)
             })
-        }catch(e){
-            console.log(e)
+            if (!request.ok){
+                throw new console.error("unable to like");
+            }
+            setLikeStatus(request)
+        }catch (error){
+            console.log(error);
         }
-        
-
-        postDispatch(updateHasLikedPost(json_body));
     }
 
-    const handleUnlike=async(post_id)=>{
-        const json_body={
-            post_id:post_id,
-            action:"like",
-        }
-
+    const handleUnlike=async(liked_post_id)=>{
         try {
-        const response = await fetch(`${apiUrl}/action/queue/useraction/unlike`,{
-        method: 'POST',
+        const request = await fetch(`${apiUrl}/action/delete/${liked_post_id}`,{
+        method: 'DELETE',
         headers : {
         'Content-type':'application/json',
-        Authorization: `Bearer ${token}`},
-        body: JSON.stringify(json_body)})
-        
+        Authorization: `Bearer ${token}`}
+        })
+        if (!request.ok){
+            throw new console.error("unable to unlike");
+        }
+        setLikeStatus(request)
     }catch (error){
         console.log(error);
     }
 
-    postDispatch(updateHasUnlikedPost(json_body));
+
     }
-    
     const handleComment=()=>{
         setEnhance(true);
     }
 
     const handleCommentSubmit=(e,post_id)=>{
         e.preventDefault();
-        
+        if (currentlyEditingPostId===post_id){
         console.log(e);
         console.log(comment,post_id);
         
@@ -167,22 +161,20 @@ const FeedPage=()=>{
             usr_id:0,
             comment:comment
         }
-
         const submitComment=async()=>{
-            await fetch(`${apiUrl}/comment/queue/addComment`,{
+            await fetch(`${apiUrl}/comment/add`,{
                 method:'POST',
                 headers:{
                     'Content-type':'application/json',
                     Authorization:`Bearer ${token}`
                 },
                 body:JSON.stringify(datatosend)
-            }).then(console.log('comment submitted'))
+            }).then(console.log('comment submitted')).then(
+                response=>setCommentStatus(response)
+            )
         }
-
-        const dataToUpdateCommentState={...datatosend,username:visitor}
-        postDispatch(addUserComment(dataToUpdateCommentState))
         submitComment();
-        setComment('');
+        setComment('');}
     }
 
     if (loading){
@@ -206,8 +198,8 @@ const FeedPage=()=>{
                         {postImages.filter(image=>post.post_id==image.post_id).map(image=><img  src={image.imageUrl}></img>)}
                         
                         <div className="post-actions">
-                          <button id={post.post_id} className={post.hasLiked? "liked-button":"unliked-button"} onClick={post.hasLiked ? ()=>handleUnlike(post.post_id) : ()=>handleLike(post.post_id)}><FontAwesomeIcon icon={faHeart}/></button>
-                          <p>  {post.likeCount}</p>
+                          <button id={post.post_id} className={post.hasLiked? "liked-button":"unliked-button"} onClick={post.hasLiked ? ()=>handleUnlike(post.post_id) : ()=>handleLike(post.post_id)}><FontAwesomeIcon className="j" icon={faHeart}/></button>
+                          <p>  {post.actions.length}</p>
                           <button id={post.post_id} type="button" className={`comment-btn`} onClick={()=>{handleComment();setCurrentlyEditingPostId(post.post_id),setComment('');if(prevPostId===post.post_id){setEnhance(false),setPrevPostId(null)}}}> <FontAwesomeIcon icon={faComment}/></button>
                         </div>
                         <div className="post-description">

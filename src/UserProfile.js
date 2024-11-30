@@ -3,6 +3,8 @@ import { useParams } from "react-router";
 import NavBar from "./NavBar";
 import "./UserProfile.css";
 import { useNavigate } from "react-router";
+import { useSelector,useDispatch } from "react-redux";
+import { setFollowers,setFollowing,doFollow,doUnFollow } from "./features/Subscriptions";
 
 const UserProfile=()=>{
     const [user,setUser]=useState();
@@ -11,15 +13,15 @@ const UserProfile=()=>{
     const [followResponse,setFollowResponse] = useState(false);
     const [postsLoading,setPostsLoading]=useState(true);
 
+    const subs=useSelector(state=>state.subs);
+    const subsDispatch=useDispatch();
+
     const [postImages,setPostImages]=useState([]);
     const [posts,setPosts] = useState([]);
 
     const [userLoading,setUserLoading]=useState(true);
     const [userProfileImage,setUserProfileImage]=useState();
     
-    const [followers,setFollowers]=useState([]);
-    const [following,setFollowing]=useState([]);
-    const visitorUserId = localStorage.getItem('id')
     const token = localStorage.getItem('token')
             
     const apiUrl = process.env.REACT_APP_API_URL;
@@ -56,7 +58,7 @@ const UserProfile=()=>{
         const fetchUserData = async () => {
             try {
                 // Fetch user info
-                const responseToGetProfileUserData = await fetch(`${apiUrl}/userinfo/${username}/${visitorUserId}`, {
+                const responseToGetProfileUserData = await fetch(`${apiUrl}/userinfo/info/${username}`, {
                     method: 'GET',
                     headers: {
                         "Content-Type": "application/json",
@@ -70,6 +72,7 @@ const UserProfile=()=>{
 
                 const userData = await responseToGetProfileUserData.json();
                 setUser(userData);
+                console.log(userData);
                 setFollowResponse(userData.is_following)
 
             } catch (error) {
@@ -79,7 +82,7 @@ const UserProfile=()=>{
 
         fetchUserData();
         setUserLoading(false);
-    }, [followResponse]);
+    }, [token]);
     
     useEffect(() => {
         const fetchAdditionalData = async () => {
@@ -116,7 +119,7 @@ const UserProfile=()=>{
                 }
 
                 const followersData = await responseToGetFollowers.json();
-                setFollowers(followersData);
+                subsDispatch(setFollowers(followersData));
 
                 // Fetch following data
                 const responseToGetFollowing = await fetch(`${apiUrl}/followers/following/${username}`, {
@@ -132,7 +135,7 @@ const UserProfile=()=>{
                 }
 
                 const followingData = await responseToGetFollowing.json();
-                setFollowing(followingData);
+                subsDispatch(setFollowing(followingData));
 
             } catch (error) {
                 console.error("Error fetching additional data:", error);
@@ -142,7 +145,7 @@ const UserProfile=()=>{
         };
 
         fetchAdditionalData();
-    }, [user, followResponse]);
+    }, [user]);
     
 
 
@@ -174,7 +177,7 @@ const UserProfile=()=>{
     
         fetchImageData(); // Call the async function here
     
-      }, [token,username]); // Dependency on token to ensure this runs when the token is available
+      }, [userLoading]); // Dependency on token to ensure this runs when the token is available
     
         useEffect(() => {
           if (postsLoading) return; // Exit early if loading is not finished
@@ -204,7 +207,6 @@ const UserProfile=()=>{
     const handleFollow=async()=>{
         const data={
             following_id:user.userid,
-            usr_id:parseInt(visitorUserId,10)
         };
         console.log(data)
         try{
@@ -216,18 +218,20 @@ const UserProfile=()=>{
             },
             body:JSON.stringify(data)
         
-        }).then(
-        setFollowResponse(!followResponse))
+        })
+        setFollowResponse(!followResponse);
+        subsDispatch(doFollow())
+        
+        
     } catch(e){
         throw new Error("Unable to update followers");
     }
-        
+    
     }
 
     const handleUnfollow=async()=>{
         const data={
             following_id:user.userid,
-            usr_id:parseInt(visitorUserId,10)
         };
         console.log(data)
         try{
@@ -239,8 +243,11 @@ const UserProfile=()=>{
             },
             body:JSON.stringify(data)
         
-        }).then(
-        setFollowResponse(!followResponse))
+        })
+        setFollowResponse(!followResponse);
+        subsDispatch(doUnFollow())
+        
+        
     } catch(e){
         console.log(e);
         throw new Error("Unable to update followers");
@@ -276,7 +283,7 @@ const UserProfile=()=>{
             </div>
             <div className="home-username">
                 <h4>{user.username}</h4>
-                <a className={user.is_following ? "unfollow-button" : "follow-button"}onClick={user.is_following ? handleUnfollow : handleFollow}>{user.is_following ? "Unfollow" : "Follow"}</a>
+                <a className={followResponse ? "unfollow-button" : "follow-button"}onClick={followResponse ? handleUnfollow : handleFollow}>{followResponse ? "Unfollow" : "Follow"}</a>
               </div>  
               <div className="userinfo-container">
                 <div className="userimg-container">
@@ -284,12 +291,12 @@ const UserProfile=()=>{
                 
               </div>
               <div className="userinfo-followers">
-                <h1>{followers.length}</h1>
+                <h1>{subs.followersCount}</h1>
                 <h2>followers</h2>
               </div>
 
               <div className="userinfo-followers">
-                <h1>{following.length}</h1>
+                <h1>{subs.followingCount}</h1>
                 <h2>following</h2>
               </div>
 
