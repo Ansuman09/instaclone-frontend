@@ -40,7 +40,6 @@ const SearchPage=()=>{
               const imageUrl = URL.createObjectURL(imageBlob);
               console.log(`Got image data: ${imageUrl}`);
               return imageUrl;
-              // Use imageUrl to display the image, e.g., set it in an <img> element.
             } catch (error) {
               console.log("Unable to get image:", error);
             }
@@ -69,13 +68,11 @@ const SearchPage=()=>{
                         console.log(data);
                     } catch (error) {
                         console.error('Error fetching data:', error);
-                        setUserLoading(true); // Ensure loading is set to false in case of error
-                    }
+                        setUserLoading(true);                }
                 };
         
                 usersearchresult();
-            }, []); // Empty dependency array ensures useEffect runs only once on component mount
-            
+            }, []); 
 
             useEffect(()=>{
                 const updateUsers=async()=>{
@@ -147,23 +144,7 @@ const SearchPage=()=>{
             fetchPostsData();
         };
 
-        // useEffect(()=>{
-        //         const updatePosts=async()=>{
-        //             const userDataWithImageUrl=await Promise.all(
-        //                 posts.map(async (post)=>{
-        //                     const imageUrl=await fetchImageUrl(post.image.);
-        //                     return {...user,imageUrl};
-        //                 })
-        //             )
-                    
-        //             setUsers(userDataWithImageUrl);
-        //             console.log(users);
-        //         }
-
-        //         updateUsers();
-        //         setLoading(false);
-                
-        //     },[userLoading]);
+        
 
             if (loading) {
                 return <h2>Loading...</h2>;

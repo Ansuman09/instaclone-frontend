@@ -145,7 +145,7 @@ const editProfile=()=>{
 
     return(
     <div>
-         <div style={{'padding-bottom':'120px'}}>
+         <div style={{'padding-bottom':'400px'}}>
               <NavBar />
               
         </div>

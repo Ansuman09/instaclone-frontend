@@ -211,7 +211,7 @@ const FeedPage=()=>{
                           <button id={post.post_id} type="button" className={`comment-btn`} onClick={()=>{handleComment();setCurrentlyEditingPostId(post.post_id),setComment('');if(prevPostId===post.post_id){setEnhance(false),setPrevPostId(null)}}}> <FontAwesomeIcon icon={faComment}/></button>
                         </div>
                         <div className="post-description">
-                        <p><b>{post.userinfo.username}</b>  {post.description}</p>
+                        {post.description && <p><b>{post.userinfo.username}</b>  {post.description}</p>}
                         </div>
                         <form className={`comment ${enhance && post.post_id===currentlyEditingPostId ? 'enhance' : ''}`} onSubmit={(e)=>{handleCommentSubmit(e,post.post_id);setCommentStatus(true)}} >
                             <input placeholder="Write Something" onClick={(e)=>{setComment(e.target.value)}} onChange={(e)=>{setComment(e.target.value);setPrevPostId(post.post_id)}} value={post.post_id == currentlyEditingPostId ? comment:''}></input>

@@ -56,10 +56,30 @@ const postSlice = createSlice({
                     }
                 })
             }
+        },
+
+        editUserComment: (state,action)=>{
+            return {...state,
+                value: state.value.map(post=>{
+                    if (action.payload.post_id===post.post_id){
+                        return{...post,
+                            comments:post.comments.map(comment=>{
+                                if (comment.comment_id===action.payload.comment_id){
+                                    return {...comment,comment:action.payload.comment}
+                                }else{
+                                    return {...comment};
+                                }
+                            })
+                        }
+                    }else{
+                        return {...post}
+                    }
+                })
+            }
         }
     }
 })
 
-export const {setPosts,updatePostLikeCount,updateHasLikedPost,updateHasUnlikedPost,addUserComment} = postSlice.actions;
+export const {setPosts,updatePostLikeCount,updateHasLikedPost,updateHasUnlikedPost,addUserComment,editUserComment} = postSlice.actions;
 
 export default postSlice.reducer;

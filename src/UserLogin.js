@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router";
 import "./LoginPage.css"
+import TermsOfUse from "./TermsOfUse";
 const UserLogin = () => {
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
@@ -85,7 +86,7 @@ const UserLogin = () => {
     return (
         <div>
             <div className="login-container">
-            <h3 className="app-name">InstaClone</h3>
+            <h3 className="app-name">Ubiquity</h3>
             <form onSubmit={handleSubmit} className="login-form">
                 <label>
                     Username:
@@ -105,6 +106,7 @@ const UserLogin = () => {
             </p>
             </div>   
             
+            <TermsOfUse/>
         </div>
     );
 };

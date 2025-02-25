@@ -6,15 +6,22 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faHeart } from "@fortawesome/free-solid-svg-icons";
 import { faComment } from "@fortawesome/free-solid-svg-icons";
 import { faArrowRight } from "@fortawesome/free-solid-svg-icons";
+import { useDispatch, useSelector } from "react-redux";
+import { addUserComment, editUserComment, setPosts, updateHasLikedPost, updateHasUnlikedPost, updatePostLikeCount } from "./features/Posts";
+import PostComment from "./PostComment";
 
 const UserPosts=()=>{
 
-    const [posts,setPosts]=useState([]);
+    const posts = useSelector(state=>state.posts.value);
+    const postDispatch = useDispatch();
     const [loading,setLoading]=useState(true);
     const [postsLoading,setPostsLoading]=useState(true);
     const [postImages,setPostImages]=useState([]);
     const {username,q}=useParams();
     const [currPost,setCurrPost]=useState(q);
+    
+    const visitor=localStorage.getItem("visitor");
+
     const [likeStatus,setLikeStatus]=useState();
     const [commentStatus,setCommentStatus]=useState(false);
     const [comment,setComment]=useState();
@@ -47,109 +54,51 @@ const UserPosts=()=>{
 
     }  
 
-    const handleCommentSubmit=(e,post_id)=>{
-      e.preventDefault();
-      
-      console.log(e);
-      console.log(comment,post_id);
-      
-      const datatosend={
-          post_id:post_id,
-          usr_id:0,
-          comment:comment
-      }
-      const submitComment=async()=>{
-          await fetch(`${apiUrl}/comment/add`,{
-              method:'POST',
-              headers:{
-                  'Content-type':'application/json',
-                  Authorization:`Bearer ${token}`
-              },
-              body:JSON.stringify(datatosend)
-          }).then(console.log('comment submitted')).then(
-              response=>setCommentStatus(response)
-          )
-      }
-      submitComment();
-      setComment('');
-      
-    }
-
     const handleLike=async(liked_post_id)=>{
+    
+            const json_body={
+                post_id:liked_post_id,
+                action:"like"
+            }
+            try{
+                const response = await fetch(`${apiUrl}/action/queue/useraction/addLike`,{
+                    method:'POST',
+                    headers: {
+                        'Content-Type':'application/json',
+                        Authorization: `Bearer ${token}`
+                    },
+                    body: JSON.stringify(json_body)
+                })
+            }catch(e){
+                console.log(e)
+            }
+            
+    
+            postDispatch(updateHasLikedPost(json_body));
+        }
+    
+        const handleUnlike=async(post_id)=>{
+            const json_body={
+                post_id:post_id,
+                action:"like",
+            }
+    
+            try {
+            const response = await fetch(`${apiUrl}/action/queue/useraction/unlike`,{
+            method: 'POST',
+            headers : {
+            'Content-type':'application/json',
+            Authorization: `Bearer ${token}`},
+            body: JSON.stringify(json_body)})
+            
+        }catch (error){
+            console.log(error);
+        }
 
-      // setLikeStatus({post_id:liked_post_id,liked:true})
-      const json_body={
-          post_id:liked_post_id,
-          action:"like"
+        postDispatch(updateHasUnlikedPost(json_body));
       }
 
-      try {
-          const request = await fetch(`${apiUrl}/action/add`,{
-              method:'POST',
-              headers: {
-                  'Content-Type':'application/json',
-                  Authorization: `Bearer ${token}`
-              },
-              body: JSON.stringify(json_body)
-          })
-          if (!request.ok){
-              throw new console.error("unable to like");
-          }
-          setLikeStatus(request)
-        
-      }catch (error){
-          console.log(error);
-      }
-  }
-
-    const handleUnlike=async(liked_post_id)=>{
-
-      // setLikeStatus({post_id:liked_post_id,liked:false})
-      try {
-      const request = await fetch(`${apiUrl}/action/delete/${liked_post_id}`,{
-      method: 'DELETE',
-      headers : {
-      'Content-type':'application/json',
-      Authorization: `Bearer ${token}`}
-      })
-      if (!request.ok){
-          throw new console.error("unable to unlike");
-      }
-      setLikeStatus(request)
-      
-  }catch (error){
-      console.log(error);
-  }
-
-
-}
-    const handleEditCommentSubmit=(e,comment_id)=>{
-      e.preventDefault();
-      
-      console.log(e);
-      console.log(`updated user comment at comment id :: ${comment_id}`);
-      
-      const datatosend={
-          comment_id:comment_id,
-          comment:editCommentToSend
-      }
-      const submitComment=async()=>{
-          await fetch(`${apiUrl}/comment/edit_this_comment`,{
-              method:'POST',
-              headers:{
-                  'Content-type':'application/json',
-                  Authorization:`Bearer ${token}`
-              },
-              body:JSON.stringify(datatosend)
-          }).then(console.log('comment submitted')).then(
-              response=>setCommentStatus(response)
-          )
-      }
-      submitComment();
-      setEditCommentToSend('');
-      setEditComment(1000);
-      
-      }
+    
     
       const fetchImageUrl = async (imageName) => {
         console.log("Called image data");
@@ -198,8 +147,10 @@ const UserPosts=()=>{
             /// setLoading(true)
 
             
-            setPosts(postsData);
+            postDispatch(setPosts(postsData));
+            postDispatch(updatePostLikeCount(postsData));
             setPostsLoading(false);
+            console.log("fetched posts data")
             console.log(posts)
           } catch (error) {
             console.error("Error fetching data:", error);
@@ -245,27 +196,34 @@ const UserPosts=()=>{
   }, [token]); // Dependency on token to ensure this runs when the token is available
 
     useEffect(() => {
-      if (postsLoading) return; // Exit early if loading is not finished
-
-      const update_posts = async () => {
-        const postsDataWithImageUrl = await Promise.all(
-          postImages.map(async (postImage) => {
-            const imageUrl = await fetchImageUrl(postImage.imageName); // Ensure this is a valid async function
-            console.log(`Got image_url as ${imageUrl}`);
-            return {
-              ...postImage,
-              imageUrl
-            };
-          })
-        );
-        setPostImages(postsDataWithImageUrl);
-      };
-
-      update_posts(); // Call the async function
-      setLoading(false);
-
-    }, [postsLoading]); // Trigger when postImages or postsLoading changes
+            if (postsLoading) return; // Exit early if loading is not finished
       
+            const update_posts = async () => {
+              const postsDataWithImageUrl = await Promise.all(
+                posts.map(async (post) => {
+                  const imageUrl = await fetchImageUrl(post.image.imageName); // Ensure this is a valid async function
+                  const profileImageUrl=await fetchImageUrl(post.userinfo.profile_image)
+                  console.log(`Got image_url as ${imageUrl}`);
+                  console.log(`Got profile image url as ${profileImageUrl}`)
+                  return {
+                    ...post,
+                    userinfo: {
+                        ...post.userinfo,
+                        profileImageUrl
+                    },
+                    imageUrl,
+                  };
+                })
+              );
+              setPostImages(postsDataWithImageUrl);
+              console.log(postsDataWithImageUrl)
+            };
+    
+            update_posts();
+            
+            setLoading(false); 
+          }, [postsLoading]); // Trigger when postImages or postsLoading changes
+        
     
 
     if (loading===true)
@@ -286,33 +244,16 @@ const UserPosts=()=>{
                   {/* <p>{}</p> */}
                   {postImages.filter(image=>image.post_id==post.post_id).map(image=><img src={image.imageUrl}></img>)}
                   <div className="post-actions">
-                          <button id={post.post_id} className={post.hasLiked? "liked-button":"unliked-button"} onClick={post.hasLiked ? ()=>handleUnlike(post.post_id) : ()=>handleLike(post.post_id)}><FontAwesomeIcon className="j" icon={faHeart}/></button>
-                          <p>  {post.actions.length}</p>
+                          <button id={post.post_id} className={post.hasLiked? "liked-button":"unliked-button"} onClick={post.hasLiked ? ()=>handleUnlike(post.post_id) : ()=>handleLike(post.post_id)}><FontAwesomeIcon icon={faHeart}/></button>
+                          <p>  {post.likeCount}</p>
                       {/*    <button id={post.post_id} type="button" className={`comment-btn`} onClick={()=>{handleComment();setCurrentlyEditingPostId(post.post_id),setComment('');if(prevPostId===post.post_id){setEnhance(false),setPrevPostId(null)}}}><FontAwesomeIcon icon={faComment}/></button> */}
                         </div>
-                         <form className='comment enhance' onSubmit={(e)=>{handleCommentSubmit(e,post.post_id);setCommentStatus(true)}} >
-                            <input placeholder="Write Something" value={comment} onClick={()=>setCommentStatus(false)}  onChange={(e)=>{setComment(e.target.value)}} ></input>
-                            <button type="submit" ><FontAwesomeIcon icon={faArrowRight}/></button>
-                        </form>
-
+                        
                         <div className="post-description">
                           <p><b>{post.userinfo.username} </b>{post.description}</p>
                         </div>
 
-                        <div className='view-comments enhance'>
-                            {post.comments.map(comment=>(
-                                <div>
-                                {visitorName===comment.userinfo.username ? <a onClick={()=>{setEditComment(parseInt(comment.comment_id,10)),setEditCommentToSend(comment.comment),console.log("name matched")}}>edit </a> : console.log(`user id visitor`)}  
-                                { editComment==comment.comment_id ? (
-                                  <form className='comment enhance' onSubmit={(e)=>handleEditCommentSubmit(e,comment.comment_id)}>
-                                  <input value={editCommentToSend} onChange={(e)=>{setEditCommentToSend(e.target.value)}}></input>
-                                  <button type="submit" ><FontAwesomeIcon icon={faArrowRight}/></button>
-                                </form>
-                                ) : <p key={comment.comment_id}><b>{comment.userinfo.username}</b> {comment.comment}</p>}
-                                
-                                </div>
-                            ))}
-                            </div>
+                  <PostComment comments={post.comments} post_id={post.post_id}/>
                                                
                   </div>
                   <button name="prev" className="prev-button" onClick={()=>handlePreviousPost(index)}>Prev</button>

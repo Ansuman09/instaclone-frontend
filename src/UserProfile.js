@@ -176,9 +176,9 @@ const UserProfile=()=>{
           }
         };
     
-        fetchImageData(); // Call the async function here
+        fetchImageData(); 
     
-      }, []); // Dependency on token to ensure this runs when the token is available
+      }, []); 
     
         useEffect(() => {
           if (postsLoading) return; 
