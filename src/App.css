@@ -242,6 +242,7 @@
     transition: width 0.3s ease;
     width: 0;
     position: fixed;
+    z-index: 5000;
   }
 
   .nav-links.active{
@@ -311,6 +312,7 @@
     height: 100%;
     position: fixed;
     right: -250px; 
+    z-index: 3000;
   }
 
   .notification-tiles.active {
@@ -391,7 +393,6 @@
     top: 0;
     left: 0;
     right: 0;
-    z-index: 10;
     background-color: #fff; 
 }
 
@@ -401,24 +402,36 @@
 
 .followers-slide li {
     list-style-type: none; 
-    margin-right: 20px; 
+    padding-right: 20px; 
 }
 
-.user-detail-container {
-  text-align: center;
-  display: block; 
+.followers-slide .user-detail-container{
+  padding: 20px;
+  display: block;
+  text-align: right;
+  cursor: pointer;
+  margin-bottom: 2px;
 }
 
-.user-detail-container img {
-  width: 50px; 
-  height: 50px;
-  border-radius: 50%; 
+.followers-slide .user-detail-container:hover{
+  background-color: #EEEEEE;
 }
 
-h3 {
-  margin-top: 5px; 
-  font-size: 14px; 
+
+.followers-slide .user-detail-container img{
+  height: 96px;
+  width: 96px;
+  border-radius: 50%;
+  border: solid 2px;
+
+} 
+
+
+.followers-slide .user-detail-container h3{
+  position: relative;
+  top:-40px;
 }
+
 
 .follower-slide-icon{
   position: absolute;

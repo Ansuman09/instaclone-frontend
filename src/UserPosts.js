@@ -22,12 +22,6 @@ const UserPosts=()=>{
     
     const visitor=localStorage.getItem("visitor");
 
-    const [likeStatus,setLikeStatus]=useState();
-    const [commentStatus,setCommentStatus]=useState(false);
-    const [comment,setComment]=useState();
-    const [editComment,setEditComment]=useState(1000);
-    const [editCommentToSend,setEditCommentToSend]=useState();
-    
     const token = localStorage.getItem('token')
     const visitorName=localStorage.getItem('visitor');
 
@@ -119,7 +113,6 @@ const UserPosts=()=>{
           const imageUrl = URL.createObjectURL(imageBlob);
           console.log(`Got image data: ${imageUrl}`);
           return imageUrl;
-          // Use imageUrl to display the image, e.g., set it in an <img> element.
         } catch (error) {
           console.log("Unable to get image:", error);
         }
@@ -163,7 +156,7 @@ const UserPosts=()=>{
             // console.log(posts)
         }); 
         
-      }, [likeStatus,commentStatus]); 
+      }, []); 
 
     useEffect(() => {
     const fetchImageData = async () => {
@@ -191,9 +184,9 @@ const UserPosts=()=>{
       }
     };
 
-    fetchImageData(); // Call the async function here
+    fetchImageData(); 
 
-  }, [token]); // Dependency on token to ensure this runs when the token is available
+  }, [token]); 
 
     useEffect(() => {
             if (postsLoading) return; // Exit early if loading is not finished
