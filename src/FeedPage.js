@@ -57,55 +57,40 @@ const FeedPage=()=>{
 
         // const token = sessionStorage.getItem('token')
 
-        fetch(`${apiUrl}/posts/feed`,{
-            method: 'GET',
-            headers:{
-                'Content-Type':'application/json',
-                Authorization: `Bearer ${token}`
-            }
-        })
-        .then(response=>{
-            if(!response.ok){
-                throw new Error("Network response was not ok");
-            }
-            return response.json();
-        })
-        .then(data=>{
-            postDispatch(setPosts(data));
-            postDispatch(updatePostLikeCount());
-            console.log(data)
-            setPostsLoading(false);
-        })
-    },[])
-
-    useEffect(() => {
-        if (postsLoading) return; // Exit early if loading is not finished
-  
-        const update_posts = async () => {
-          const postsDataWithImageUrl = await Promise.all(
-            posts.map(async (post) => {
-              const imageUrl = await fetchImageUrl(post.image.imageName); // Ensure this is a valid async function
-              const profileImageUrl=await fetchImageUrl(post.userinfo.profile_image)
-              console.log(`Got image_url as ${imageUrl}`);
-              console.log(`Got profile image url as ${profileImageUrl}`)
-              return {
-                ...post,
-                userinfo: {
-                    ...post.userinfo,
-                    profileImageUrl
-                },
-                imageUrl,
-              };
+        const getPostsData=async()=>{
+            const postsResponse=await fetch(`${apiUrl}/posts/feed`,{
+                method: 'GET',
+                headers:{
+                    'Content-Type':'application/json',
+                    Authorization: `Bearer ${token}`
+                }
             })
-          );
-          setPostImages(postsDataWithImageUrl);
-          console.log(postsDataWithImageUrl)
-        };
 
-        update_posts();
+            if(!postsResponse.ok){
+                throw "Unable to get posts";
+            }
+
+        const postsData = await postsResponse.json();
+
+        const postsDataWithImageUrl = await Promise.all(
+            postsData.map(async (post) => {
+                const imageUrl = await fetchImageUrl(post.image.imageName); // Ensure this is a valid async function
+                console.log(`Got image_url as ${imageUrl}`);
+                return {
+                ...post,
+                imageUrl,
+                };
+            })
+            );
+
         
-        setLoading(false); 
-      }, [postsLoading]); // Trigger when postImages or postsLoading changes
+        postDispatch(setPosts(postsDataWithImageUrl));
+        postDispatch(updatePostLikeCount(postsDataWithImageUrl));
+        setLoading(false);
+        }
+        
+        getPostsData();
+    },[])
   
   
     const handleLike=async(liked_post_id)=>{
@@ -203,7 +188,7 @@ const FeedPage=()=>{
                         {postImages.filter(image=>post.post_id==image.post_id).map(image=><img  src={image.userinfo.profileImageUrl}></img>)}
                         <h4>{post.userinfo.username}</h4>
                         </div>
-                        {postImages.filter(image=>post.post_id==image.post_id).map(image=><img  src={image.imageUrl}></img>)}
+                        <img  src={post.imageUrl}></img>
                         
                         <div className="post-actions">
                           <button id={post.post_id} className={post.hasLiked? "liked-button":"unliked-button"} onClick={post.hasLiked ? ()=>handleUnlike(post.post_id) : ()=>handleLike(post.post_id)}><FontAwesomeIcon icon={faHeart}/></button>

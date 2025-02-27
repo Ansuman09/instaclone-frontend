@@ -11,22 +11,26 @@ const UserProfileFollowing=({username})=>{
     const subs=useSelector(state=>state.subs);
     const [loading,setLoading] = useState(true);
 
-    useEffect(async()=>{
-        const responseToGetFollowing = await fetch(`${apiUrl}/followers/following/${username}`, {
-            method: 'GET',
-            headers: {
-                "Content-Type": "application/json",
-                Authorization: `Bearer ${token}`
+    useEffect(()=>{
+        const funcToFetchFollowing=async()=>{
+            const responseToGetFollowing = await fetch(`${apiUrl}/followers/following/${username}`, {
+                method: 'GET',
+                headers: {
+                    "Content-Type": "application/json",
+                    Authorization: `Bearer ${token}`
+                }
+            });
+    
+            if (!responseToGetFollowing.ok) {
+                throw new Error("Failed to load following");
             }
-        });
-
-        if (!responseToGetFollowing.ok) {
-            throw new Error("Failed to load following");
+    
+            const followingData = await responseToGetFollowing.json();
+            subsDispatch(setFollowing(followingData));
+            setLoading(false);
         }
-
-        const followingData = await responseToGetFollowing.json();
-        subsDispatch(setFollowing(followingData));
-        setLoading(false);
+        
+        funcToFetchFollowing();
     },[username])
 
     return (
