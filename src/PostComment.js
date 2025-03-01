@@ -1,18 +1,21 @@
 import react, { useEffect, useState } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { editUserComment,addUserComment } from "./features/Posts";
 import { faArrowRight } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { addComment, setComments, updateUserComment } from "./features/Comments";
 
-const PostComment=(comments)=>{
+const PostComment=({post_id})=>{
 
     
     const postDispatch = useDispatch();
-    
+    const commentsDispatch=useDispatch();
+    const comments=useSelector(state=>state.comments.value);
+    const [commentStatement,setCommentStatement]=useState();
     const token = localStorage.getItem('token')
     
+    const [commentLimit, setCommentLimit] = useState("5");
     const visitorName=localStorage.getItem('visitor');
-    const [comment,setComment]=useState('');
     const [editComment,setEditComment]=useState(10000);
     const [editCommentToSend,setEditCommentToSend]=useState("");
     const [commentStatus,setCommentStatus]=useState(false);
@@ -21,21 +24,41 @@ const PostComment=(comments)=>{
     const apiUrl = process.env.REACT_APP_API_URL;
     
     useEffect(() => {
+    
+        const commentsGetter = async()=>{
+            const response=await fetch(`${apiUrl}/comment/by/post/${post_id}`,{
+                method:'GET',
+                headers: {
+                    'Content-type':'application/json',
+                    Authorization: `Bearer ${token}`
+                }
+            })
+
+            if (!response.ok){
+                throw "Unable to load comments";
+            }
+
+            const commentsData= await response.json();
+            commentsDispatch(setComments(commentsData));
+            console.log('got comments')
+            
+            
+        }
+
+        commentsGetter();
         setLoading(false);
-        console.log("This is inside comments");
-        console.log(comments);
-    }, [comments]); 
+        console.log("comment limit");
+        console.log(commentLimit);
+        setCommentLimit("5")
+    }, [post_id]); 
     
     const handleCommentSubmit=(e,post_id)=>{
                 e.preventDefault();
                 
-                console.log(e);
-                console.log(comment,post_id);
-                
                 const datatosend={
                     post_id:post_id,
                     usr_id:0,
-                    comment:comment
+                    comment:commentStatement
                 }
         
                 const submitComment=async()=>{
@@ -50,9 +73,9 @@ const PostComment=(comments)=>{
                 }
         
                 const dataToUpdateCommentState={...datatosend,username:visitorName}
-                postDispatch(addUserComment(dataToUpdateCommentState))
+                commentsDispatch(addComment(dataToUpdateCommentState))
                 submitComment();
-                setComment('');
+                setCommentStatement('');
             }
     
     const handleEditCommentSubmit=(e,comment_id,post_id)=>{
@@ -79,7 +102,7 @@ const PostComment=(comments)=>{
               )
           }
     
-          postDispatch(editUserComment({...datatosend,post_id:post_id}))
+          postDispatch(updateUserComment({...datatosend,post_id:post_id}))
           submitComment();
           setEditCommentToSend('');
           setEditComment(1000);
@@ -92,25 +115,27 @@ const PostComment=(comments)=>{
 
     return (
         <div>
-        <form className='comment enhance' onSubmit={(e)=>{handleCommentSubmit(e,comments.post_id)}} >
-            <input placeholder="Write Something" value={comment}  onChange={(e)=>{setComment(e.target.value)}} ></input>
+        <form className='comment enhance' onSubmit={(e)=>{handleCommentSubmit(e,post_id)}} >
+            <input placeholder="Write Something" value={commentStatement}  onChange={(e)=>{setCommentStatement(e.target.value)}} ></input>
             <button type="submit" ><FontAwesomeIcon icon={faArrowRight}/></button>
         </form>
 
 
         <div className='view-comments enhance'>
-            {comments.comments.map(comment=>(
-                <div>
+            {comments.slice(0,commentLimit ? parseInt(commentLimit):comments.length).map(comment=>(
+                <div key={comment.comment_id}>
                 {visitorName===comment.userinfo.username ? <a onClick={()=>{setEditComment(parseInt(comment.comment_id,10)),setEditCommentToSend(comment.comment),console.log("name matched")}}>edit </a> : console.log(`user id visitor`)}  
                 { editComment==comment.comment_id ? (
-                    <form className='comment enhance' onSubmit={(e)=>handleEditCommentSubmit(e,comment.comment_id,comments.post_id)}>
+                    <form className='comment enhance' onSubmit={(e)=>handleEditCommentSubmit(e,comment.comment_id,post_id)}>
                     <input value={editCommentToSend} onChange={(e)=>{setEditCommentToSend(e.target.value)}}></input>
                     <button type="submit" ><FontAwesomeIcon icon={faArrowRight}/></button>
                 </form>
                 ) : <p key={comment.comment_id}><b>{comment.userinfo.username}</b> {comment.comment}</p>}
                 
                 </div>
+                
             ))}
+            {commentLimit && <p  onClick={()=>{setCommentLimit(null)}}>seeMore</p>}
         </div>
         </div>
 

@@ -38,11 +38,11 @@ const NavBar = (props) => {
         if(response.ok){
             const data = await response.json();
             notificationDispatch(setNotifications(data));
-            console.log(data);
+           
         }}
 
         fetchNotifications();
-    },{});
+    },[]);
 
     const handleHomeNavigation = () => {
         nav('/homepage');
@@ -107,7 +107,7 @@ const NavBar = (props) => {
 
     return (
         <div className="navbar">
-        <div className="nav-container">
+        <div key="home" className="nav-container">
             <div className="nav-home-link">
                 <button type="button" name="Home" onClick={handleHomeNavigation}>Home</button>
             </div>
@@ -125,23 +125,23 @@ const NavBar = (props) => {
                 <button type="button" className="nav-button" onClick={handleShowLink}><FontAwesomeIcon icon={faBars}/></button>
             </div>
         </div>
-        <div className={`nav-links ${showNav ? 'active':''}`} >
+        <div key="navigation-links" className={`nav-links ${showNav ? 'active':''}`} >
             <ul>
-                <button type="button" onClick={handleFeedsView}><FontAwesomeIcon icon={faSquareRss}/> Feed</button>
+                <button type="button" key="feed" onClick={handleFeedsView}><FontAwesomeIcon icon={faSquareRss}/> Feed</button>
                 <br />
-                <button type="button" onClick={handlePostView}><FontAwesomeIcon icon={faCamera}/> Post</button>
+                <button type="button" key="addPost" onClick={handlePostView}><FontAwesomeIcon icon={faCamera}/> Post</button>
                 <br />
-                <button type="button" name="Logout" onClick={handleLogout}><FontAwesomeIcon icon={faRightFromBracket}/> Logout</button>
+                <button type="button" key="logout" name="Logout" onClick={handleLogout}><FontAwesomeIcon icon={faRightFromBracket}/> Logout</button>
                 <br />
-                <button type="button"  onClick={handleEditProfile}><FontAwesomeIcon icon={faUserCircle}/> Profile</button>
+                <button type="button"  key="editProfile" onClick={handleEditProfile}><FontAwesomeIcon icon={faUserCircle}/> Profile</button>
                 <br/>
 
                 {props.role=="ROLE_ADMIN" && <button type="button" onClick={handleAdminPage}><FontAwesomeIcon icon={faUserLock}/> Secure</button>}
             </ul>
         </div>
-        <div className={`notification-tiles ${showNotification ? 'active':''}`}>
+        <div key="notification" className={`notification-tiles ${showNotification ? 'active':''}`}>
             {notifications.map(notification=>(
-                <div  className={`notification-message-${notification.status}`} onClick={()=>handleReadNotification(notification.id)}>
+                <div  key={notification.id} className={`notification-message-${notification.status}`} onClick={()=>handleReadNotification(notification.id)}>
                     <b>{notification.actinguser} </b> {notification.message}
                 </div>
             ))}

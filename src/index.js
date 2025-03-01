@@ -8,19 +8,20 @@ import postReducer from './features/Posts';
 import subsReducer from './features/Subscriptions';
 import notificationReducer from './features/Notifications';
 import userInfoReducer from './features/Userinfo';
-
+import commentReducer from './features/Comments';
 const store = configureStore({
   reducer:{
     posts:postReducer,
     subs:subsReducer,
     notifications:notificationReducer,
-    users:userInfoReducer
+    users:userInfoReducer,
+    comments:commentReducer
   },
 });
 
-ReactDOM.render(
+const root = ReactDOM.createRoot(document.getElementById('root'));
+root.render(
   <Provider store={store}>
-    <App/>
-  </Provider>,
-  document.getElementById('root')
+    <App />
+  </Provider>
 );

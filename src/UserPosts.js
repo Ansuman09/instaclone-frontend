@@ -7,7 +7,7 @@ import { faHeart } from "@fortawesome/free-solid-svg-icons";
 import { faComment } from "@fortawesome/free-solid-svg-icons";
 import { faArrowRight } from "@fortawesome/free-solid-svg-icons";
 import { useDispatch, useSelector } from "react-redux";
-import { addUserComment, editUserComment, setPosts, updateHasLikedPost, updateHasUnlikedPost, updatePostLikeCount } from "./features/Posts";
+import {  setPosts, updateHasLikedPost, updateHasUnlikedPost, updatePostLikeCount } from "./features/Posts";
 import PostComment from "./PostComment";
 
 const UserPosts=()=>{
@@ -15,8 +15,8 @@ const UserPosts=()=>{
     const posts = useSelector(state=>state.posts.value);
     const postDispatch = useDispatch();
     const [loading,setLoading]=useState(true);
-    const [postsLoading,setPostsLoading]=useState(true);
-    const [postImages,setPostImages]=useState([]);
+    
+    const [enhance,setEnhance]=useState(false);
     const {username,q}=useParams();
     const [currPost,setCurrPost]=useState(q);
     
@@ -139,10 +139,27 @@ const UserPosts=()=>{
             const postsData = await responseToGetPostsData.json();
             /// setLoading(true)
 
-            
-            postDispatch(setPosts(postsData));
-            postDispatch(updatePostLikeCount(postsData));
-            setPostsLoading(false);
+            const postsDataWithImageUrl = await Promise.all(
+              postsData.map(async (post) => {
+                const imageUrl = await fetchImageUrl(post.image.imageName); // Ensure this is a valid async function
+                const profileImageUrl=await fetchImageUrl(post.userinfo.profile_image)
+                console.log(`Got image_url as ${imageUrl}`);
+                console.log(`Got profile image url as ${profileImageUrl}`)
+                return {
+                  ...post,
+                  userinfo: {
+                      ...post.userinfo,
+                      profileImageUrl
+                  },
+                  imageUrl,
+                };
+              })
+            );
+
+
+            postDispatch(setPosts(postsDataWithImageUrl));
+            postDispatch(updatePostLikeCount(postsDataWithImageUrl));
+            setLoading(false);
             console.log("fetched posts data")
             console.log(posts)
           } catch (error) {
@@ -158,65 +175,6 @@ const UserPosts=()=>{
         
       }, []); 
 
-    useEffect(() => {
-    const fetchImageData = async () => {
-      try {
-        const responseToGetImagesByOwner = await fetch(`${apiUrl}/postimages/all/${username}`, {
-          method: "GET",
-          headers: {
-            "Content-type": "application/json",
-            Authorization: `Bearer ${token}`
-          }
-        });
-
-        if (!responseToGetImagesByOwner.ok) {
-          throw new Error("Unable to retrieve post images");
-        }
-
-        const postImagesData = await responseToGetImagesByOwner.json();
-        setPostImages(postImagesData);
-         // Only set this after fetching is successful
-        console.log(`These are all the post images: ${postImagesData}`);
-        console.log(postImagesData);
-        
-      } catch (error) {
-        console.error("Error fetching post images:", error);
-      }
-    };
-
-    fetchImageData(); 
-
-  }, [token]); 
-
-    useEffect(() => {
-            if (postsLoading) return; // Exit early if loading is not finished
-      
-            const update_posts = async () => {
-              const postsDataWithImageUrl = await Promise.all(
-                posts.map(async (post) => {
-                  const imageUrl = await fetchImageUrl(post.image.imageName); // Ensure this is a valid async function
-                  const profileImageUrl=await fetchImageUrl(post.userinfo.profile_image)
-                  console.log(`Got image_url as ${imageUrl}`);
-                  console.log(`Got profile image url as ${profileImageUrl}`)
-                  return {
-                    ...post,
-                    userinfo: {
-                        ...post.userinfo,
-                        profileImageUrl
-                    },
-                    imageUrl,
-                  };
-                })
-              );
-              setPostImages(postsDataWithImageUrl);
-              console.log(postsDataWithImageUrl)
-            };
-    
-            update_posts();
-            
-            setLoading(false); 
-          }, [postsLoading]); // Trigger when postImages or postsLoading changes
-        
     
 
     if (loading===true)
@@ -224,7 +182,6 @@ const UserPosts=()=>{
     else
         // console.log(posts);
         // console.log(userProfileId);
-        console.log(postImages)
         return(
             
             <div className="user-posts-container">
@@ -235,18 +192,18 @@ const UserPosts=()=>{
                 <div>
                 <div className="post-container">
                   {/* <p>{}</p> */}
-                  {postImages.filter(image=>image.post_id==post.post_id).map(image=><img src={image.imageUrl}></img>)}
+                  <img src={post.imageUrl}></img>
                   <div className="post-actions">
                           <button id={post.post_id} className={post.hasLiked? "liked-button":"unliked-button"} onClick={post.hasLiked ? ()=>handleUnlike(post.post_id) : ()=>handleLike(post.post_id)}><FontAwesomeIcon icon={faHeart}/></button>
                           <p>  {post.likeCount}</p>
-                      {/*    <button id={post.post_id} type="button" className={`comment-btn`} onClick={()=>{handleComment();setCurrentlyEditingPostId(post.post_id),setComment('');if(prevPostId===post.post_id){setEnhance(false),setPrevPostId(null)}}}><FontAwesomeIcon icon={faComment}/></button> */}
+                          <button id={post.post_id} type="button" className={`comment-btn`} onClick={()=>{setEnhance(!enhance)}}> <FontAwesomeIcon icon={faComment}/></button>
                         </div>
                         
                         <div className="post-description">
                           <p><b>{post.userinfo.username} </b>{post.description}</p>
                         </div>
-
-                  <PostComment comments={post.comments} post_id={post.post_id}/>
+                  
+                  {enhance && <PostComment  post_id={post.post_id}/>}
                                                
                   </div>
                   <button name="prev" className="prev-button" onClick={()=>handlePreviousPost(index)}>Prev</button>
