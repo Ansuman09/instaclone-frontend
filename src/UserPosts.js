@@ -9,6 +9,7 @@ import { faArrowRight } from "@fortawesome/free-solid-svg-icons";
 import { useDispatch, useSelector } from "react-redux";
 import {  setPosts, updateHasLikedPost, updateHasUnlikedPost, updatePostLikeCount } from "./features/Posts";
 import PostComment from "./PostComment";
+import { jwtDecode } from "jwt-decode";
 
 const UserPosts=()=>{
 
@@ -23,6 +24,7 @@ const UserPosts=()=>{
     const visitor=localStorage.getItem("visitor");
 
     const token = localStorage.getItem('token')
+    
     const visitorName=localStorage.getItem('visitor');
 
     const apiUrl = process.env.REACT_APP_API_URL;
@@ -204,7 +206,7 @@ const UserPosts=()=>{
                         </div>
                   
                   {enhance && <PostComment  post_id={post.post_id}/>}
-                                               
+                  
                   </div>
                   <button name="prev" className="prev-button" onClick={()=>handlePreviousPost(index)}>Prev</button>
                   <button name="next" className="next-button" onClick={()=>handleNextPost(index)}>Next</button>

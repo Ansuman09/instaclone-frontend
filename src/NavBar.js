@@ -13,6 +13,7 @@ const NavBar = (props) => {
     const nav = useNavigate();
     const userid = localStorage.getItem('id');
     const token = localStorage.getItem('token');
+    const decodedToken = jwtDecode(token);
     const [showNav,setShowNav]=useState(false);
 
     const [showNotification,setShowNotifications] = useState(false);
@@ -39,7 +40,7 @@ const NavBar = (props) => {
             const data = await response.json();
             notificationDispatch(setNotifications(data));
            
-        }}
+        }}  
 
         fetchNotifications();
     },[]);
@@ -74,7 +75,7 @@ const NavBar = (props) => {
             console.log("notification update request sent")
         }
 
-
+        
     }
     const handleShowLink=()=>{
         setShowNav(!showNav);
@@ -129,14 +130,14 @@ const NavBar = (props) => {
             <ul>
                 <button type="button" key="feed" onClick={handleFeedsView}><FontAwesomeIcon icon={faSquareRss}/> Feed</button>
                 <br />
-                <button type="button" key="addPost" onClick={handlePostView}><FontAwesomeIcon icon={faCamera}/> Post</button>
-                <br />
+                {decodedToken.roles[0]!=="ROLE_RO_USER"  && <button type="button" key="addPost" onClick={handlePostView}><FontAwesomeIcon icon={faCamera}/> Post</button> }
+                {decodedToken.roles[0]!=="ROLE_RO_USER" && <br />}
                 <button type="button" key="logout" name="Logout" onClick={handleLogout}><FontAwesomeIcon icon={faRightFromBracket}/> Logout</button>
                 <br />
-                <button type="button"  key="editProfile" onClick={handleEditProfile}><FontAwesomeIcon icon={faUserCircle}/> Profile</button>
+                {decodedToken.roles[0]!=="ROLE_RO_USER"  && <button type="button"  key="editProfile" onClick={handleEditProfile}><FontAwesomeIcon icon={faUserCircle}/> Profile</button>}
                 <br/>
 
-                {props.role=="ROLE_ADMIN" && <button type="button" onClick={handleAdminPage}><FontAwesomeIcon icon={faUserLock}/> Secure</button>}
+                {decodedToken.roles[0]=="ROLE_ADMIN" && <button type="button" onClick={handleAdminPage}><FontAwesomeIcon icon={faUserLock}/> Secure</button>}
             </ul>
         </div>
         <div key="notification" className={`notification-tiles ${showNotification ? 'active':''}`}>
