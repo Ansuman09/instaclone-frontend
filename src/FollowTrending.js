@@ -102,6 +102,7 @@ const FollowTrending = ({ apiUrl, token }) => {
                     <div className="user-detail-container" key={user.usr_id} onClick={()=>{handleNameClick(user.username)}}>
                         {user.imageUrl && <img src={user.imageUrl} alt={user.username} />}
                         <h3>{user.username}</h3>
+
                         
                     </div>
                     </li>

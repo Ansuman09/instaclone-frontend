@@ -3,6 +3,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React, { useEffect, useState } from "react";
 import NavBar from "./NavBar";
 import "./AdminController.css";
+import ManageRolesController from "./ManageRolesController";
 
 const AdminController =()=>{
 
@@ -15,32 +16,6 @@ const AdminController =()=>{
 
     const apiUrl = process.env.REACT_APP_API_URL;
 
-    // useEffect(()=>{
-    //     if (table=="posts"){
-    //         const getPostsData=async ()=>{
-    //             const response = await fetch(`${apiUrl}/posts/all`,{
-    //                 method:"GET",
-    //                 headers: {
-    //                     "Content-Type": "application/json",
-    //                     Authorization: `Bearer ${token}`
-    //                   }
-
-    //             })
-
-    //             if (response.ok){
-    //                 const data = await response.json()
-    //                 setPosts(data);
-    //                 console.log(data)
-    //                 setLoading(false)
-    //             }
-                
-    //         }
-
-    //         getPostsData()  ;
-    //     }
-    //     console.log(table)
-
-    // },[])
 
     const handleFetchTableData=(e)=>{
         e.preventDefault();
@@ -132,7 +107,7 @@ const AdminController =()=>{
             <NavBar />        
         <div style={{paddingLeft:300,paddingTop:150}}>
             
-            <h3>This is where sm manager works</h3>
+            <h3>This is where ADMIN works</h3>
 
             <form>
                 <label>
@@ -180,6 +155,8 @@ const AdminController =()=>{
                 </table>
             }
             </div>
+
+            <ManageRolesController />
         </div>
         </div>
     )

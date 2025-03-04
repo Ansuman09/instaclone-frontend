@@ -14,7 +14,7 @@ const PostComment=({post_id})=>{
     const comments=useSelector(state=>state.comments.value);
     const [commentStatement,setCommentStatement]=useState();
     const token = localStorage.getItem('token')
-    const decodedToken = jwtDecode(token);
+    const userRoles = jwtDecode(token).roles;
     
     const [commentLimit, setCommentLimit] = useState("5");
     const visitorName=localStorage.getItem('visitor');
@@ -117,7 +117,7 @@ const PostComment=({post_id})=>{
 
     return (
         <div>
-        {decodedToken.roles[0]!=="ROLE_RO_USER" && <form className='comment enhance' onSubmit={(e)=>{handleCommentSubmit(e,post_id)}} >
+        {userRoles.includes("ROLE_RW_USER") && <form className='comment enhance' onSubmit={(e)=>{handleCommentSubmit(e,post_id)}} >
             <input placeholder="Write Something" value={commentStatement}  onChange={(e)=>{setCommentStatement(e.target.value)}} ></input>
             <button type="submit" ><FontAwesomeIcon icon={faArrowRight}/></button>
         </form>}

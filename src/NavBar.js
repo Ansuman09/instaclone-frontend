@@ -1,22 +1,24 @@
 import React, { useState,useEffect } from "react";
 import { useNavigate } from "react-router";
-import { faBars, faBell, faBellConcierge, faBellSlash, faCamera, faClose, faCross, faRightFromBracket, faSquareRss, faUserAlt, faUserCircle, faUserGroup, faUserLock, faUserNinja } from "@fortawesome/free-solid-svg-icons";
+import { faBars, faBell, faBellConcierge, faBellSlash, faCamera, faClose, faCross, faHomeAlt, faRightFromBracket, faSearch, faSquareRss, faUserAlt, faUserCircle, faUserGroup, faUserLock, faUserNinja } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 import { jwtDecode } from "jwt-decode";
 import { useDispatch, useSelector } from "react-redux";
 import { setNotifications,updateNotifications } from "./features/Notifications";
 import FollowTrending from "./FollowTrending";
+import { faHome } from "@fortawesome/free-solid-svg-icons/faHome";
 
 const NavBar = (props) => {
     const [searchString, setSearchString] = useState("");
     const nav = useNavigate();
     const userid = localStorage.getItem('id');
     const token = localStorage.getItem('token');
-    const decodedToken = jwtDecode(token);
+    const userRoles = jwtDecode(token).roles;
     const [showNav,setShowNav]=useState(false);
 
     const [showNotification,setShowNotifications] = useState(false);
+    
     
     const notificationDispatch=useDispatch();
     const notifications=useSelector(state=>state.notifications.value);
@@ -109,20 +111,24 @@ const NavBar = (props) => {
     return (
         <div className="navbar">
         <div key="home" className="nav-container">
-            <div className="nav-home-link">
-                <button type="button" name="Home" onClick={handleHomeNavigation}>Home</button>
+            <div className="nav-home-link item-1">
+                <i onClick={handleHomeNavigation}><FontAwesomeIcon icon={faHome}/></i>
+                <span onClick={handleHomeNavigation}> Home</span>
+                
             </div>
-            <div className="nav-notification-button">
+            <div className="nav-notification-button item-2">
             {notifications.filter(notification => notification.status === 'unread').length !==0 ?  <button type="button" className="notification-icon-unread" onClick={handleShowNotifications}><FontAwesomeIcon icon={faBell} /></button> : <button type="button" className="notification-icon-read" onClick={handleShowNotifications}><FontAwesomeIcon icon={faBell} /></button> }
             {<span>{notifications.filter(notification => notification.status === 'unread').length}</span>}
             </div>
-            <div >
-                <form onSubmit={handleSearch} className="nav-search-bar">
+            <div className="nav-search-bar item-3">
+                <form  >
                     <input type="text" value={searchString} onChange={(e) => setSearchString(e.target.value)} />
-                    <button type="submit">Search</button>
+                    <i onClick={handleSearch}><FontAwesomeIcon icon={faSearch}/></i>
+                    <span onClick={handleSearch}>Search</span>
+                   
                 </form>
             </div>
-            <div>
+            <div className="nav-button-holder item-4">
                 <button type="button" className="nav-button" onClick={handleShowLink}><FontAwesomeIcon icon={faBars}/></button>
             </div>
         </div>
@@ -130,14 +136,14 @@ const NavBar = (props) => {
             <ul>
                 <button type="button" key="feed" onClick={handleFeedsView}><FontAwesomeIcon icon={faSquareRss}/> Feed</button>
                 <br />
-                {decodedToken.roles[0]!=="ROLE_RO_USER"  && <button type="button" key="addPost" onClick={handlePostView}><FontAwesomeIcon icon={faCamera}/> Post</button> }
-                {decodedToken.roles[0]!=="ROLE_RO_USER" && <br />}
+                {userRoles.includes("ROLE_RW_USER")  && <button type="button" key="addPost" onClick={handlePostView}><FontAwesomeIcon icon={faCamera}/> Post</button> }
+                {userRoles.includes("ROLE_RW_USER") && <br />}
                 <button type="button" key="logout" name="Logout" onClick={handleLogout}><FontAwesomeIcon icon={faRightFromBracket}/> Logout</button>
                 <br />
-                {decodedToken.roles[0]!=="ROLE_RO_USER"  && <button type="button"  key="editProfile" onClick={handleEditProfile}><FontAwesomeIcon icon={faUserCircle}/> Profile</button>}
+                {userRoles.includes("ROLE_RW_USER")  && <button type="button"  key="editProfile" onClick={handleEditProfile}><FontAwesomeIcon icon={faUserCircle}/> Profile</button>}
                 <br/>
 
-                {decodedToken.roles[0]=="ROLE_ADMIN" && <button type="button" onClick={handleAdminPage}><FontAwesomeIcon icon={faUserLock}/> Secure</button>}
+                {userRoles.includes("ROLE_ROLES_MANAGER") && <button type="button" onClick={handleAdminPage}><FontAwesomeIcon icon={faUserLock}/> Secure</button>}
             </ul>
         </div>
         <div key="notification" className={`notification-tiles ${showNotification ? 'active':''}`}>

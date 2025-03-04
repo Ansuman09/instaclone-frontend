@@ -145,15 +145,15 @@ const editProfile=()=>{
 
     return(
     <div>
-         <div style={{'padding-bottom':'400px'}}>
+         <div className="edit-profile-component">
               <NavBar />
               
         </div>
-        <div style={{paddingLeft:300}}>
+        <div className="edit-profile-container">
         <div className="edit-profile-form">
-            {!changeProfileImage && <button type="button" className="update-image" onClick={()=>{setChangeProfileImage(true)}}><FontAwesomeIcon icon={faImagePortrait}/></button>}
+            {!changeProfileImage && <span className="update-image" onClick={()=>{setChangeProfileImage(true)}}><FontAwesomeIcon icon={faImagePortrait}/></span>}
             {changeProfileImage && <input type="file" onChange={(e)=>handleFileUpload(e.target.files[0])} />}
-            {updloadedImage && <button type="button" className="confirm-image" onClick={handleImageUpdate}><FontAwesomeIcon icon={faCheckCircle}/></button>}
+            {updloadedImage && <span className="confirm-image" onClick={handleImageUpdate}><FontAwesomeIcon icon={faCheckCircle}/></span>}
             
             <p></p>
             <img src={userProfileImage} alt="Profile image"></img>
@@ -161,7 +161,7 @@ const editProfile=()=>{
             
             <p>Username: </p>
             <input value={userDataToSend.username} onChange={(e)=>setUserDataToSend({...userDataToSend,username:e.target.value})}></input>
-            <button type="button" className="update-username" onClick={handleUsernameUpdate}><FontAwesomeIcon icon={faArrowCircleRight}/></button>
+            <span className="update-username" onClick={handleUsernameUpdate}><FontAwesomeIcon icon={faArrowCircleRight}/></span>
         </div>
         </div>
     </div>)

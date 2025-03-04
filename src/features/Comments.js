@@ -24,7 +24,7 @@ const commentSlice = createSlice({
             return {...state,
                 value:state.value.map(comment=>{
                     if (comment.comment_id===action.payload.comment_id){
-                        return {...comment,comment:action.payload.comment,comment};
+                        return {...comment,comment:action.payload.comment};
                     }else{
                         return{...comment}
                     }

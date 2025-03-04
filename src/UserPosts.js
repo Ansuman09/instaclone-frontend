@@ -3,7 +3,7 @@ import "./UserPosts.css";
 import { useState,useEffect } from "react";
 import { useParams } from "react-router";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faHeart } from "@fortawesome/free-solid-svg-icons";
+import { faCircleArrowLeft, faCircleArrowRight, faHeart } from "@fortawesome/free-solid-svg-icons";
 import { faComment } from "@fortawesome/free-solid-svg-icons";
 import { faArrowRight } from "@fortawesome/free-solid-svg-icons";
 import { useDispatch, useSelector } from "react-redux";
@@ -192,7 +192,7 @@ const UserPosts=()=>{
                   console.log(post)
                   return (<div key={post.post_id}>{post.post_id===parseInt(currPost,10) ? 
                 <div>
-                <div className="post-container">
+                <div className="user-posts-page post-container">
                   {/* <p>{}</p> */}
                   <img src={post.imageUrl}></img>
                   <div className="post-actions">
@@ -208,8 +208,8 @@ const UserPosts=()=>{
                   {enhance && <PostComment  post_id={post.post_id}/>}
                   
                   </div>
-                  <button name="prev" className="prev-button" onClick={()=>handlePreviousPost(index)}>Prev</button>
-                  <button name="next" className="next-button" onClick={()=>handleNextPost(index)}>Next</button>
+                  <span name="prev" className="prev-button" onClick={()=>handlePreviousPost(index)}><FontAwesomeIcon icon={faCircleArrowLeft}/></span>
+                  <span name="next" className="next-button" onClick={()=>handleNextPost(index)}><FontAwesomeIcon icon={faCircleArrowRight}/></span>
                 </div>: null}      
                 
             

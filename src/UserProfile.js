@@ -128,12 +128,12 @@ const UserProfile = () => {
   }
 
   return (
-    <div>
+    <div className="user-profile-contents">
       <div style={{ paddingBottom: '120px' }}>
         <NavBar />
       </div>
 
-      <div className="home-username">
+      <div className="user-profile-username-and-follow">
         <h4>{user.username}</h4>
         <a
           className={followResponse ? "unfollow-button" : "follow-button"}

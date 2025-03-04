@@ -171,20 +171,21 @@
     display: flex;
     /* margin-bottom: 20px; */
     padding: 20px;
+    gap: 10px;
     background-color: #FFF8F3;
   }
 
   .nav-home-link {
-    min-width: 70%;
+    min-width: 65%;
   }
 
-  .nav-home-link button{
+  .nav-home-link {
     background-color:  #FFF8F3;
     color: black;
     border: 1px solid #FFF8F3;
     cursor: pointer;
     font-size: 2rem;
-    padding: 8px;
+    padding: 0px 8px 0 8px;
   }
 
   .nav-home-link button:hover{
@@ -195,25 +196,25 @@
   /* NavBar.css */
 
   .nav-search-bar {
-    align-items: center; /* Optional: Center items vertically */
-    justify-content: space-between; /* Optional: Space between items */
+    align-items: center;
+    display: flex; 
+    justify-content: space-between;
   }
 
   .nav-search-bar input {
-    padding: 10px; /* Adjust padding around the text */
-    border: 1px solid #ccc; /* Example border style */
-    border-radius: 4px; /* Rounded corners */
-    background-color: #f0f0f0; /* Background color */
-    color: #333; /* Text color */
-    width: 75%; /* Adjust width as needed */
-    font-size: 16px; /* Font size of the text */
-    box-sizing: border-box; /* Ensures padding and border are included in width/height */
+    padding: 10px; 
+    border: 1px solid #ccc; 
+    border-radius: 4px; 
+    background-color: #f0f0f0; 
+    color: #333;
+    width: 65%; 
+    font-size: 12px; 
+    box-sizing: border-box; 
   }
 
-  .nav-search-bar button {
-    /* Optional: Style the search button if needed */
-    margin-left: 10px;
-    padding: 10px;
+  .nav-search-bar span {
+    margin-left: 4px;
+    padding: 11px 12px 12px 11px;
     border: none;
     background-color: black;
     color: #fff;
@@ -222,10 +223,13 @@
     font-size: 16px;
   }
 
+  .nav-search-bar i {
+    display: none;
+  }
+
   .nav-button {
     background-color: #FFF8F3;  
     font-size: 1.95rem;
-    margin-left: 2px;
     border: none;
     cursor: pointer;
   }
@@ -447,3 +451,98 @@
   color: #b4afaf;
 
  }
+
+
+ /* for phones and tabs */
+ @media (max-width: 768px) {
+  .post-container{
+    margin: 0 auto 50px;
+    width: 95%;
+    padding: 3px;
+     padding: 5px;
+  }
+
+  .nav-home-link{
+    min-width: 10%;
+    display: flex;
+    gap: 20px;
+  }
+  .nav-home-link span{
+    display: none;
+  }
+
+  .nav-home-link i{
+    cursor: pointer;
+  }
+
+  
+  .nav-search-bar  input{
+    min-width: 75%;
+  }
+
+  .nav-search-bar span {
+    display: none;
+  }
+  
+  .nav-search-bar i {
+    font-size: .98rem;
+    margin-left: 4px;
+    display: inline-block;
+    color: wheat;
+    background-color: black;
+    padding: 8px 9px 9px 8px;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+
+  .nav-button-holder{
+    width: 12%;
+
+    }
+
+  /*swaps search and notification*/
+  .nav-container .item-2{
+      order: 2;
+  }
+
+  .nav-container .item-3{
+    order: 1;
+}
+
+  .nav-container .item-4{
+  order: 4;
+}
+
+
+.userinfo-container{
+  display: flex;
+  padding-top: 0;
+}
+
+.userimg-container{
+  width: 160px;
+  padding-left: 2px;
+  padding-right: 20px;
+  /* gap: 30px; */
+}
+
+.userimg-container img{
+  width: 120px;
+  height: 120px;
+}
+
+.userinfo-followers{
+  text-align: right;
+  padding: 30px 40px 40px 0;
+  
+}
+
+.userinfo-followers h1{
+  font-size: 20px;
+  text-align: center;
+}
+
+.userinfo-followers h2{
+  font-size: 15px;
+}
+    }

@@ -24,3 +24,16 @@
     width: 100%;
     text-align: center;
 }
+
+@media  (max-width: 768px)  {
+    .home-posts-container{
+        padding: 5px;
+        margin: 0;
+    }
+    
+    .home-posts-container .post-container {
+        flex: 0 0 30%;
+        height: 120px;
+    }
+    
+}

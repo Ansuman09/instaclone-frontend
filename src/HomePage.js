@@ -86,7 +86,7 @@ const HomePage=()=>{
               
             </div>
             <div className="home-username">
-                <h4>{}</h4>
+                <h4>{visitor}</h4>
               </div>  
               <div className="userinfo-container">
                 <div className="userimg-container">

@@ -3,11 +3,11 @@
     position: absolute;
     top: 50%;
     width: auto;
-    margin-top: -22px;
     padding: 16px;
-    color: rgb(15, 1, 1);
+    color: rgb(14, 0, 0);
+    background: none;
     font-weight: bold;
-    font-size: 18px;
+    font-size: 2rem;
     transition: 0.6s ease;
     border-radius: 0 3px 3px 0;
     user-select: none;
@@ -25,9 +25,27 @@
   }
 
 .prev-button:hover, .next-button:hover {
-    background-color: rgba(0,0,0,0.8);
+    color: beige;
   }
   
 .user-posts-container{
   padding-top: 40px;
+}
+
+
+@media (max-width: 768px) {
+  .prev-button, .next-button {
+    cursor: pointer;
+    position: absolute;
+    top: 80%;
+    margin-left:2px ;
+    margin-right: -2px;
+  } 
+
+  
+  .user-posts-page .post-container {
+    height: 100%;
+    min-width: 100%;
+  }
+
 }

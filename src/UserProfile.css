@@ -28,3 +28,21 @@
 .userprofile-posts-image{
     cursor: pointer;
 }
+
+
+ /* for phones and tabs */
+ @media (max-width: 768px) {
+    .user-profile-username-and-follow{
+        display: flex;
+        padding: 0 0 0 50%;
+        margin-bottom: 0px;
+        gap: 30px;
+        align-items: center;
+        
+    }
+
+
+
+    
+
+ }
