@@ -159,9 +159,9 @@ const editProfile=()=>{
             <img src={userProfileImage} alt="Profile image"></img>
             <p></p>
             
-            <p>Username: </p>
+            {/* <p>Username: </p>
             <input value={userDataToSend.username} onChange={(e)=>setUserDataToSend({...userDataToSend,username:e.target.value})}></input>
-            <span className="update-username" onClick={handleUsernameUpdate}><FontAwesomeIcon icon={faArrowCircleRight}/></span>
+            <span className="update-username" onClick={handleUsernameUpdate}><FontAwesomeIcon icon={faArrowCircleRight}/></span> */}
         </div>
         </div>
     </div>)
