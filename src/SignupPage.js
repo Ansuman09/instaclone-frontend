@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router";
 import "./LoginPage.css";
+import { jwtDecode } from "jwt-decode";
 
 const SignupPage = () => {
     const [username, setUsername] = useState("");
@@ -9,7 +10,10 @@ const SignupPage = () => {
     const [confirmPassword, setConfirmPassword] = useState(""); // Track confirm password separately
     const [errorMessage, setErrorMessage] = useState(null);
     const [passwordVisible, setPasswordVisible] = useState(false); // Toggle password visibility
+    
     const apiUrl = process.env.REACT_APP_API_URL;
+    const token = localStorage.getItem('token')
+    const userRoles = jwtDecode(token).roles;
     
     const nav = useNavigate();
 
@@ -54,8 +58,8 @@ const SignupPage = () => {
     };
 
     return (
-        <div>
-            <div className="login-container">
+         <div>
+            {userRoles.includes("ROLE_ROLES_MANAGER") && <div className="login-container">
                 <h3 className="app-name">InstaClone</h3>
                 <form onSubmit={handleSubmit} className="login-form">
                     <label>Username:</label>
@@ -95,7 +99,7 @@ const SignupPage = () => {
                     
                     {errorMessage && <p>{errorMessage}</p>}
                 </form>
-            </div>   
+            </div>}   
         </div>
     );
 };
