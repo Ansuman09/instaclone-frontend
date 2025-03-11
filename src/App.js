@@ -1,5 +1,5 @@
 import React from 'react';
-import { BrowserRouter as Router, Routes,Route } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import FeedPage from './FeedPage';
 import UserLogin from './UserLogin';
 import './App.css';
@@ -9,26 +9,27 @@ import UserProfile from './UserProfile';
 import SignupPage from './SignupPage';
 import CreatePost from './CreatePost';
 import UserPosts from './UserPosts';
-import editProfile from './EditProfile';
+import EditProfile from './EditProfile';
 import AdminController from './AdminController';
+import HomeLoading from './loadingComponents/HomeLoading';
 
 const App = () => {
     return (
         <Router>
             <div> 
               <Routes>
-                    <Route exact path="/" Component={UserLogin} />
-                    <Route path="/feedpage" Component={FeedPage} />
-                    <Route path='/homepage' Component={HomePage} />
-                    <Route path="/search/:q" Component={SearchPage} />
-                    <Route path="/userprofile/:username" Component={UserProfile}/>
-                    <Route path='/signup' Component={SignupPage} />
-                    <Route path='/addpost' Component={CreatePost} />
-                    <Route path='/editprofile' Component={editProfile}/>
-                    <Route path='/userposts/:username/:q' Component={UserPosts} />
-                    <Route path='/adminpage' Component={AdminController}/>
+                    <Route exact path="/" element={<UserLogin />} />
+                    <Route path="/feedpage" element={<FeedPage />} />
+                    <Route path='/homepage' element={<HomePage />} />
+                    <Route path="/search/:q" element={<SearchPage />} />
+                    <Route path="/userprofile/:username" element={<UserProfile />} />
+                    <Route path='/signup' element={<SignupPage />} />
+                    <Route path='/addpost' element={<CreatePost />} />
+                    <Route path='/editprofile' element={<EditProfile />} />
+                    <Route path='/userposts/:username/:q' element={<UserPosts />} />
+                    <Route path='/adminpage' element={<AdminController />} />
               </Routes>
-                </div>
+            </div>
         </Router>
     );
 };

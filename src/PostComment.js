@@ -42,15 +42,12 @@ const PostComment=({post_id})=>{
 
             const commentsData= await response.json();
             commentsDispatch(setComments(commentsData));
-            console.log('got comments')
             
             
         }
 
         commentsGetter();
         setLoading(false);
-        console.log("comment limit");
-        console.log(commentLimit);
         setCommentLimit("5")
     }, [post_id]); 
     
@@ -83,8 +80,6 @@ const PostComment=({post_id})=>{
     const handleEditCommentSubmit=(e,comment_id,post_id)=>{
           e.preventDefault();
           
-          console.log(e);
-          console.log(`updated user comment at comment id :: ${comment_id}`);
           
           const datatosend={
               comment_id:comment_id,
@@ -123,12 +118,12 @@ const PostComment=({post_id})=>{
         </form>}
 
 
-        <div className='view-comments enhance'>
+        <div className='view-comments'>
             {comments.slice(0,commentLimit ? parseInt(commentLimit):comments.length).map(comment=>(
                 <div key={comment.comment_id}>
-                {visitorName===comment.userinfo.username ? <a onClick={()=>{setEditComment(parseInt(comment.comment_id,10)),setEditCommentToSend(comment.comment),console.log("name matched")}}>edit </a> : console.log(`user id visitor`)}  
+                {visitorName===comment.userinfo.username ? <a onClick={()=>{setEditComment(parseInt(comment.comment_id,10)),setEditCommentToSend(comment.comment),console.log("excuted")}}>edit </a> : console.log(`not executed`)}  
                 { editComment==comment.comment_id ? (
-                    <form className='comment enhance' onSubmit={(e)=>handleEditCommentSubmit(e,comment.comment_id,post_id)}>
+                    <form className='comment' onSubmit={(e)=>handleEditCommentSubmit(e,comment.comment_id,post_id)}>
                     <input value={editCommentToSend} onChange={(e)=>{setEditCommentToSend(e.target.value)}}></input>
                     <button type="submit" ><FontAwesomeIcon icon={faArrowRight}/></button>
                 </form>

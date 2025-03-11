@@ -31,7 +31,7 @@ const CreatePost = () => {
         
         // Set the desired size (350x280)
         const width = 600;
-        const height = 350;
+        const height = 600;
 
         canvas.width = width;
         canvas.height = height;
@@ -87,8 +87,8 @@ const CreatePost = () => {
       </div>
 
       <div className="new-post">
-        <div className="new-post-container">
-          <form onSubmit={(e) => handleAddPost(e)}>
+        
+          <form onSubmit={(e) => handleAddPost(e)} className="new-post-container">
             <label>Upload an Image</label>
             <input type="file" className="browse-button" onChange={(e) => handleImageSelection(e.target.files[0])}></input>
             <br />
@@ -97,8 +97,7 @@ const CreatePost = () => {
             <input className="description-input" value={description} onChange={(e) => setDescription(e.target.value)} placeholder="Write Something"></input>
             <button className="submit-new-post" type="submit"><FontAwesomeIcon icon={faArrowRight} /></button>
           </form>
-        </div>
-      </div>
+       </div>
     </div>
   );
 }

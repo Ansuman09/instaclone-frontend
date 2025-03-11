@@ -2,6 +2,11 @@
     padding-top: 50px;
 }
 
+.admin-controller-component{
+    padding-left: 300px;
+    padding-top: 150px;
+}
+
 .data-table{
     white-space:none;
 }
@@ -21,15 +26,38 @@
 }
 
 .delete-btn{
-    background-color: red;
+    background-color: #f44336;
     color: white;
     border-radius: 2px;
     cursor: pointer;
 }
 
+.delete-btn:hover{
+    background-color: #A31D1D;
+
+}
+
 .update-btn{
-    background-color: green;
+    background-color:#A0C878;
     color: white;
     border-radius: 2px;
     cursor: pointer;
+}
+
+.update-btn:hover{
+    background-color: #3E7B27;
+}
+
+@media (max-width:768px){
+    .admin-controller-component{
+        padding:20px;
+        padding-top: 40px;
+
+    }
+    
+    .data-table-container{
+        padding-bottom: 30px;
+        font-size: 10px;
+    }
+
 }

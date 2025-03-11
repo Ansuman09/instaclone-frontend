@@ -4,6 +4,7 @@ import { useParams } from "react-router";
 import { useNavigate } from "react-router";
 import "./SearchPage.css";
 import NavBar from "./NavBar";
+import HomeLoading from "./loadingComponents/HomeLoading";
 
 const SearchPage=()=>{
         const [users,setUsers]=useState([]);
@@ -22,7 +23,7 @@ const SearchPage=()=>{
                         
 
         const fetchImageUrl = async (imageName) => {
-            console.log("Called image data");
+
             try {
               const response = await fetch(`${apiUrl}/get-images/images/${imageName}`, {
                 method: 'GET',
@@ -38,7 +39,7 @@ const SearchPage=()=>{
           
               const imageBlob = await response.blob();
               const imageUrl = URL.createObjectURL(imageBlob);
-              console.log(`Got image data: ${imageUrl}`);
+              
               return imageUrl;
             } catch (error) {
               console.log("Unable to get image:", error);
@@ -49,7 +50,7 @@ const SearchPage=()=>{
                 const usersearchresult = async () => {
                     try {
                         const search_string = encodeURIComponent(q);
-                        console.log(q)
+                        
                         const response = await fetch(`${apiUrl}/userinfo/all/${search_string}`, {
                             method: 'GET',
                             headers: {
@@ -65,9 +66,8 @@ const SearchPage=()=>{
                         const data = await response.json();
                         setUsers(data);
                         setUserLoading(false);
-                        console.log(data);
+
                     } catch (error) {
-                        console.error('Error fetching data:', error);
                         setUserLoading(true);                }
                 };
         
@@ -84,7 +84,6 @@ const SearchPage=()=>{
                     )
                     
                     setUsers(userDataWithImageUrl);
-                    console.log(users);
                 }
 
                 updateUsers();
@@ -113,14 +112,12 @@ const SearchPage=()=>{
 
                     const data = await response.json();
                     setPostData(data);
-                    console.log(data);
                     setSearchType("posts");
 
                     //fetchPostImageafter posts data
                     await fetchPostWithImage(data); 
 
                 } catch (error) {
-                    console.log(error);
                     setPostLoading(false); 
                     setPostLoading(true);
                 }
@@ -147,7 +144,7 @@ const SearchPage=()=>{
         
 
             if (loading) {
-                return <h2>Loading...</h2>;
+                return <HomeLoading/>;
             } else {
                 return (
                     <div>

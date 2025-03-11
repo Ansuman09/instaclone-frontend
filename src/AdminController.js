@@ -105,7 +105,7 @@ const AdminController =()=>{
     return(
         <div>
             <NavBar />        
-        <div style={{paddingLeft:300,paddingTop:150}}>
+        <div className="admin-controller-component">
             
             <h3>This is where ADMIN works</h3>
 

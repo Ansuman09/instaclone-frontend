@@ -1,0 +1,74 @@
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 100;
+  }
+  
+  .modal-content {
+    background-color: white;
+    padding: 20px;
+    border-radius: 5px;
+    max-height: 70%;
+    width: 50%;
+    position: relative;
+    overflow-y: scroll;
+  }
+  
+  .close-btn {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    padding: 5px 10px;
+    background-color: #f44336;
+    color: white;
+    border: none;
+    cursor: pointer;
+  }
+  
+  .close-btn:hover{
+    background-color: #A31D1D;
+    }
+
+  
+    .modal-content .delete-btn{
+      font-size: 1.2rem;
+      padding: 10px;
+      border-radius: 10px;
+      margin-right: 20px;
+    }
+  
+    
+    .modal-content .update-btn{
+      font-size: 1.2rem;
+      padding: 10px;
+      border-radius: 10px;
+      margin-right: 20px;
+    }
+
+@media (max-width: 600px){
+  .modal-content {
+    min-width: 80%;
+  }
+
+  .modal-content .delete-btn{
+    background-color: #f44336;
+    font-size: 1.5rem;
+    padding: 10px;
+    border-radius: 10px;
+    margin-right: 20px;
+  }
+
+  .modal-content .update-btn{
+    font-size: 1.5rem;
+    padding: 10px;
+    border-radius: 10px;
+    margin-right: 20px;
+  }
+}

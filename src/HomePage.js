@@ -8,6 +8,7 @@ import { jwtDecode } from "jwt-decode";
 import HomePagePosts from "./HomePagePosts";
 import UserProfileFollowing from "./UserProfileFollowing";
 import UserProfileFollowers from "./UserProfileFollowers";
+import HomeLoading from "./loadingComponents/HomeLoading";
 
 const HomePage=()=>{
 
@@ -75,9 +76,7 @@ const HomePage=()=>{
   
 
     if (loading){
-        return (<div>
-            <h3>loading...</h3>
-        </div>)
+        return (<HomeLoading/>)
     }else{
         return (
         <div>

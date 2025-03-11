@@ -4,8 +4,8 @@ const UploadPage = () => {
     const [owner_id, setOwner_id] = useState('');
     const [image_url, setImage_url] = useState('');
     const [description, setDescription] = useState('');
-    const token = "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJLeWxpYW5NIiwiZXhwIjoxNzE5MDgxNzQyfQ.UujvYMf1uC8YxyZAvpVmLlJ8z4VwKkTuGa2r1dQcHYTeldLIhuAEJSayZEQEtGqK9sk2k6VnZnNeLyDWshoOXQ"; // Replace with your actual token
-
+    const token = localStorage.getItem('token')
+    
     const apiUrl = process.env.REACT_APP_API_URL;
 
     const handleSubmit = async (event) => {
@@ -30,14 +30,12 @@ const UploadPage = () => {
                 throw new Error('Failed to upload');
             }
 
-            console.log('Uploaded Successfully');
 
             // Reset form fields
             setOwner_id('');
             setImage_url('');
             setDescription('');
         } catch (error) {
-            console.error('Error during upload:', error.message);
             // Handle error: show error message to user, log, etc.
         }
     };

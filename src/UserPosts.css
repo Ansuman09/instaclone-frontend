@@ -1,3 +1,8 @@
+.user-posts-page  {
+  padding-top: 40px;
+  height: 100%;
+}
+
 .prev-button, .next-button {
     cursor: pointer;
     position: absolute;
@@ -28,9 +33,6 @@
     color: beige;
   }
   
-.user-posts-container{
-  padding-top: 40px;
-}
 
 
 @media (max-width: 768px) {
@@ -43,7 +45,8 @@
   } 
 
   
-  .user-posts-page .post-container {
+  .user-posts-page  {
+    padding-top: 40px;
     height: 100%;
     min-width: 100%;
   }

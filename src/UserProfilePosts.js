@@ -37,7 +37,7 @@ const UserProfilePosts=({username})=>{
                 const postsDataWithImageUrl = await Promise.all(
                     postsData.map(async (post) => {
                         const imageUrl = await fetchImageUrl(post.image.imageName); // Ensure this is a valid async function
-                        console.log(`Got image_url as ${imageUrl}`);
+                        
                         return {
                         ...post,
                         imageUrl,
@@ -49,15 +49,12 @@ const UserProfilePosts=({username})=>{
                 postDispatch(setPosts(postsDataWithImageUrl));
                 
             }
-            console.log("got posts data")
             getPostsData();
             setLoading(false);
-            console.log(posts);
         },[username])
 
     const fetchImageUrl = async (imageName) => {
         //function to get images from image name
-        console.log("Called image data");
         try {
             const response = await fetch(`${apiUrl}/get-images/images/${imageName}`, {
             method: 'GET',
@@ -73,7 +70,6 @@ const UserProfilePosts=({username})=>{
         
             const imageBlob = await response.blob();
             const imageUrl = URL.createObjectURL(imageBlob);
-            console.log(`Got image data: ${imageUrl}`);
             return imageUrl;
         } catch (error) {
             console.log("Unable to get image:", error);

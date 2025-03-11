@@ -8,6 +8,7 @@ import UserProfilePosts from "./UserProfilePosts";
 import UserProfileFollowers from "./UserProfileFollowers";
 import UserProfileFollowing from "./UserProfileFollowing";
 import "./UserProfile.css";
+import HomeLoading from "./loadingComponents/HomeLoading";
 
 const UserProfile = () => {
   const [user, setUser] = useState(null);
@@ -124,7 +125,7 @@ const UserProfile = () => {
   };
 
   if (loading) {
-    return <h1>...Loading</h1>;
+    return <HomeLoading/>;
   }
 
   return (

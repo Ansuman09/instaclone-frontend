@@ -81,10 +81,12 @@ const NavBar = (props) => {
     }
     const handleShowLink=()=>{
         setShowNav(!showNav);
+        setShowNotifications(false);
     }
 
     const handleShowNotifications=()=>{
         setShowNotifications(!showNotification);
+        setShowNav(false);
     }
 
     const handleFeedsView=()=>{

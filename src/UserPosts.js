@@ -10,6 +10,8 @@ import { useDispatch, useSelector } from "react-redux";
 import {  setPosts, updateHasLikedPost, updateHasUnlikedPost, updatePostLikeCount } from "./features/Posts";
 import PostComment from "./PostComment";
 import { jwtDecode } from "jwt-decode";
+import PostComponent from "./PostComponent";
+import HomeLoading from "./loadingComponents/HomeLoading";
 
 const UserPosts=()=>{
 
@@ -33,7 +35,6 @@ const UserPosts=()=>{
 
     const handleNextPost=(index)=>{
       if (index<posts.length-1){
-        console.log(`next post is ${posts[index+1]}`);
         setCurrPost(posts[index+1].post_id);
       }
       // setCurrPost(posts.post_id)
@@ -42,7 +43,6 @@ const UserPosts=()=>{
 
     const handlePreviousPost=(index)=>{
       if (index>0){
-        console.log(`next post is ${posts[index-1]}`);
         setCurrPost(posts[index-1].post_id);
       }
       // setCurrPost(posts.post_id)
@@ -97,7 +97,7 @@ const UserPosts=()=>{
     
     
       const fetchImageUrl = async (imageName) => {
-        console.log("Called image data");
+
         try {
           const response = await fetch(`${apiUrl}/get-images/images/${imageName}`, {
             method: 'GET',
@@ -113,7 +113,7 @@ const UserPosts=()=>{
       
           const imageBlob = await response.blob();
           const imageUrl = URL.createObjectURL(imageBlob);
-          console.log(`Got image data: ${imageUrl}`);
+
           return imageUrl;
         } catch (error) {
           console.log("Unable to get image:", error);
@@ -145,8 +145,7 @@ const UserPosts=()=>{
               postsData.map(async (post) => {
                 const imageUrl = await fetchImageUrl(post.image.imageName); // Ensure this is a valid async function
                 const profileImageUrl=await fetchImageUrl(post.userinfo.profile_image)
-                console.log(`Got image_url as ${imageUrl}`);
-                console.log(`Got profile image url as ${profileImageUrl}`)
+                
                 return {
                   ...post,
                   userinfo: {
@@ -162,8 +161,6 @@ const UserPosts=()=>{
             postDispatch(setPosts(postsDataWithImageUrl));
             postDispatch(updatePostLikeCount(postsDataWithImageUrl));
             setLoading(false);
-            console.log("fetched posts data")
-            console.log(posts)
           } catch (error) {
             console.error("Error fetching data:", error);
           }
@@ -172,7 +169,6 @@ const UserPosts=()=>{
         
         fetchData().then(()=>{
             // setLikeStatus()
-            // console.log(posts)
         }); 
         
       }, []); 
@@ -180,34 +176,17 @@ const UserPosts=()=>{
     
 
     if (loading===true)
-        return(<>loading...</>)
+        return(<HomeLoading/>)
     else
-        // console.log(posts);
-        // console.log(userProfileId);
         return(
             
             <div className="user-posts-container">
             <div >
                 {posts.map((post,index)=>{
-                  console.log(post)
+ 
                   return (<div key={post.post_id}>{post.post_id===parseInt(currPost,10) ? 
-                <div>
-                <div className="user-posts-page post-container">
-                  {/* <p>{}</p> */}
-                  <img src={post.imageUrl}></img>
-                  <div className="post-actions">
-                          <button id={post.post_id} className={post.hasLiked? "liked-button":"unliked-button"} onClick={post.hasLiked ? ()=>handleUnlike(post.post_id) : ()=>handleLike(post.post_id)}><FontAwesomeIcon icon={faHeart}/></button>
-                          <p>  {post.likeCount}</p>
-                          <button id={post.post_id} type="button" className={`comment-btn`} onClick={()=>{setEnhance(!enhance)}}> <FontAwesomeIcon icon={faComment}/></button>
-                        </div>
-                        
-                        <div className="post-description">
-                          <p><b>{post.userinfo.username} </b>{post.description}</p>
-                        </div>
-                  
-                  {enhance && <PostComment  post_id={post.post_id}/>}
-                  
-                  </div>
+                <div className="user-posts-page">
+                <PostComponent post={post}/>
                   <span name="prev" className="prev-button" onClick={()=>handlePreviousPost(index)}><FontAwesomeIcon icon={faCircleArrowLeft}/></span>
                   <span name="next" className="next-button" onClick={()=>handleNextPost(index)}><FontAwesomeIcon icon={faCircleArrowRight}/></span>
                 </div>: null}      

@@ -10,11 +10,23 @@ const postSlice = createSlice({
         setPosts:(state,action)=>{
             state.value=action.payload;
         },
+        activePostUpdateWithPostId: (state, action) => {
+            state.value = state.value.map(post => {
+                if (post.post_id !== action.payload) {
+                    return { ...post, activePost: false };
+                } else {
+                    return { ...post, activePost: true };
+                }
+                
+            });
+        },
         updatePostLikeCount:(state,action)=>{
                 state.value=state.value.map(post=>{
                     return ({
                         ...post,
-                        likeCount:post.actions.length})
+                        likeCount:post.actions.length,
+                        activePost:false
+                    })
                 });
         },
         
@@ -80,6 +92,6 @@ const postSlice = createSlice({
     }
 })
 
-export const {setPosts,updatePostLikeCount,updateHasLikedPost,updateHasUnlikedPost,addUserComment,editUserComment} = postSlice.actions;
+export const {setPosts,updatePostLikeCount,updateHasLikedPost,updateHasUnlikedPost,addUserComment,editUserComment,activePostUpdateWithPostId} = postSlice.actions;
 
 export default postSlice.reducer;

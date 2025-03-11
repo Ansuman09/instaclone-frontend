@@ -1,3 +1,11 @@
+.user-profile-username-and-follow{
+    display: flex;
+    padding: 0 0 0 50%;
+    margin-bottom: 0px;
+    gap: 30px;
+    align-items: center;
+    
+}
 .follow-button {
     border: 2px;
     background-color: #00CCDD;
@@ -31,7 +39,7 @@
 
 
  /* for phones and tabs */
- @media (max-width: 768px) {
+ @media (max-width: 600px) {
     .user-profile-username-and-follow{
         display: flex;
         padding: 0 0 0 50%;

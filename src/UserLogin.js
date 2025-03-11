@@ -68,8 +68,7 @@ const UserLogin = () => {
             }
 
             const token = authHeader.split(' ')[1];
-            console.log("Authentication successful:", token);
-            console.log(apiUrl)
+            
             setIsAuth(true);
             localStorage.setItem('token', token);
             localStorage.setItem('visitor',username);
@@ -84,9 +83,9 @@ const UserLogin = () => {
     };
 
     return (
-        <div>
+        <div className="login-component">
             <div className="login-container">
-            <h3 className="app-name">Ubiquity</h3>
+            <h3 className="app-name">VibeSphere</h3>
             <form onSubmit={handleSubmit} className="login-form">
                 <label>
                     Username:
@@ -101,11 +100,11 @@ const UserLogin = () => {
                 <button type="submit">Login</button>
                 {errorMessage && <p>{errorMessage}</p>}
             </form>
-            <p>
+            <p style={{color:"wheat"}}>
                 First time on the website? <i onClick={()=>{nav("/signup")}}>sign up</i>
             </p>
             </div>   
-            
+            <br></br>            
             <TermsOfUse/>
         </div>
     );

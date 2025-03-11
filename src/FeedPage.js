@@ -2,23 +2,21 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React from "react";
 // import /
 import { useEffect,useState } from "react";
-import { faArrowRight, faHeart } from "@fortawesome/free-solid-svg-icons";
-import { faComment} from "@fortawesome/free-solid-svg-icons"
+// import { faArrowRight, faHeart, faHeartPulse } from "@fortawesome/free-solid-svg-icons";
+// import { faComment} from "@fortawesome/free-solid-svg-icons"
 import { useSelector,useDispatch } from "react-redux";
 import { setPosts,updatePostLikeCount,updateHasLikedPost,updateHasUnlikedPost,addUserComment } from "./features/Posts";
 
 import NavBar from "./NavBar";
-import PostComment from "./PostComment";
-import { jwtDecode } from "jwt-decode";
+import PostComponent from "./PostComponent";
+import HomeLoading from "./loadingComponents/HomeLoading";
 const FeedPage=()=>{
     const postDispatch=useDispatch();
     const posts=useSelector(state=>state.posts.value);
     const [loading,setLoading] = useState(true);
     const token = localStorage.getItem('token');
-    
-    const [enhance,setEnhance] = useState(false);
-    const [currentlyEditingPostId,setCurrentlyEditingPostId]=useState();
 
+    
     const apiUrl = process.env.REACT_APP_API_URL;
 
     //this function gets images from names
@@ -87,6 +85,7 @@ const FeedPage=()=>{
         
         postDispatch(setPosts(postsDataWithImageUrl));
         postDispatch(updatePostLikeCount(postsDataWithImageUrl));
+        // postDispatch(updateActivePost(postsDataWithImageUrl));
         setLoading(false);
         }
         catch(error){
@@ -98,57 +97,10 @@ const FeedPage=()=>{
     },[])
   
   
-    const handleLike=async(liked_post_id)=>{
-
-        const json_body={
-            post_id:liked_post_id,
-            action:"like"
-        }
-        try{
-            const response = await fetch(`${apiUrl}/action/queue/useraction/addLike`,{
-                method:'POST',
-                headers: {
-                    'Content-Type':'application/json',
-                    Authorization: `Bearer ${token}`
-                },
-                body: JSON.stringify(json_body)
-            })
-        }catch(e){
-            console.log(e)
-        }
-        
-
-        postDispatch(updateHasLikedPost(json_body));
-    }
-
-    const handleUnlike=async(post_id)=>{
-        const json_body={
-            post_id:post_id,
-            action:"like",
-        }
-
-        try {
-        const response = await fetch(`${apiUrl}/action/queue/useraction/unlike`,{
-        method: 'POST',
-        headers : {
-        'Content-type':'application/json',
-        Authorization: `Bearer ${token}`},
-        body: JSON.stringify(json_body)})
-        
-    }catch (error){
-        console.log(error);
-    }
-
-    postDispatch(updateHasUnlikedPost(json_body));
-    }
     
-    const handleComment=(postid,currPostId)=>{
-        setEnhance(true);
-    }
-
 
     if (loading){
-        return (<h3>Loading...</h3>);
+        return (<HomeLoading/>);
     }
     else{
         return(
@@ -158,25 +110,7 @@ const FeedPage=()=>{
                 </div>
                 <div className="posts-container">
                 {posts.map(post=>(
-                    <div key={post.post_id} className="post-container">
-                        <div className="post-ownerinfo">
-                        
-                        <img  src={post.userinfo.profileImageUrl}></img>
-                        <h4>{post.userinfo.username}</h4>
-                        </div>
-                        <img  src={post.imageUrl}></img>
-                        
-                        <div className="post-actions" >
-                          <button id={post.post_id} className={post.hasLiked? "liked-button":"unliked-button"} onClick={post.hasLiked ? ()=>handleUnlike(post.post_id) : ()=>handleLike(post.post_id)}><FontAwesomeIcon icon={faHeart}/></button>
-                          <p>  {post.likeCount}</p>
-                          <button id={post.post_id} type="button" className={`comment-btn`} onClick={()=>{setEnhance(!enhance),setCurrentlyEditingPostId(post.post_id)}}> <FontAwesomeIcon icon={faComment}/></button>
-                        </div>
-                        <div className="post-description">
-                        {post.description && <p><b>{post.userinfo.username}</b>  {post.description}</p>}
-                        </div>
-                        {post.post_id === currentlyEditingPostId ? enhance && <PostComment post_id={post.post_id}/>:<p></p>}
-                        
-                    </div>
+                    <PostComponent post={post}/>
                 ))}
                 </div>
             </div>

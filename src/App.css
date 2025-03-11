@@ -1,14 +1,15 @@
 
 
 
-
-  .post-container{
+  .post-container-with-cmt{
     margin: 0 auto 50px;
     width: 45%;
-    padding: 3px;
-    border-style: solid;
-    border-radius: 10px;
-    padding: 5px;
+    box-shadow: 0 0 50px rgba(0, 0, 0, 0.315);
+    background-color: #fff;
+  }
+  .post-container{
+    /* color: $bright-color; */
+    position: relative;
   }
 
 
@@ -19,43 +20,121 @@
   /* auto auto; */
   }
 
-  .post-container h4 {
-    margin-bottom: 12px;
-    text-align: left;
-
-  }
-
+  
   .post-actions {
     display: flex;
     align-items: center;
-    padding: 0%;
+    padding: 4px;
+    position: absolute;
+    bottom: 15%;
+    
   }
 
-  .post-actions button{
-    margin-right: 5px;
-    margin-left: 2px; 
+  .post-actions span {
+    margin-left:20px ;
+    cursor: pointer;
   }
+
+  .post-actions p {
+    margin-left:3px ;
+    color: #fff;
+  }
+
+  
+  .post-actions .view-post-description {
+    color: #fff;
+    font-size: 1.3rem;
+  }
+  
+  .post-actions .view-post-description:hover{
+    color: #4F959D;
+    font-size: 1.3rem;
+  }
+
+  .post-actions .delete-btn{
+    background: none;
+    color: #fff;
+    font-size: 1.3rem;
+    margin-left: 20px;
+  }
+    
 
   .post-ownerinfo {
-    display: flex;
-    padding-bottom: 8px;
-    padding-top: 5px;
+    display: flex;  
+    padding:10px 5px 10px 5px;
+    column-gap: 10px;
+    box-sizing: border-box;
+    align-items: center;
   }
 
   .post-ownerinfo img{
-    width: 50px;
-    height: 50px;
-    margin-right: 5px;
+    width: 66px;
+    height: 66px;
     border-radius: 50%;
+    object-position: center;
+    object-fit: cover;
     border: 2px solid #817474;
   }
 
+  .post-userinfo-desc h4{
+    color: #334454;
+    font-size: 1rem;
+    margin: 0;
+  }
+
+  .post-userinfo-desc .username{
+    cursor: pointer;
+  }
+  
+  .post-userinfo-desc p{
+    margin: 0;
+  }
+
   .post-description{
-    display: flex;
+    position: absolute;
+    top: 0;
+    height: 0;
+
+  }
+
+  .post-description{
+    position: absolute;
+    top: 10%;
+    height: 0;
+    background-color: white;
+    overflow-y: scroll;
+    transition: 0.8s ease;
+    opacity: 0;
+    border-radius: 20px 20px 0 0;
+    scrollbar-width: thin;
+    padding-left: 5%;
+    padding-right: 5%;
+    width: 90%;
+  }
+
+
+  .post-description.active{
+    opacity: 1;
+    
+    height: 90%;
+    width: 90%;
+  }
+
+  .post-advanced-actions{
+    max-width: 10%;
+    /* bottom:40px;   */
+  }
+  .closing-cmnt-desc-btn{
+    position: absolute;
+    left: 50%;
+    top: 2px;
+    font-size: 1.5rem;
+    cursor: pointer;
   }
 
   .userinfo-container{
     display: flex;
+
   }
 
   .userimg-container{
@@ -84,86 +163,87 @@
   }
 
   .liked-button {
-    background: none;
-    border: none;
-    padding: 0;
     cursor: pointer;
     color: rgb(214, 47, 47);
     font-size: 1.3rem;
   }
 
-  .liked-button:focus{
-    outline: none;
-  }
-
   .unliked-button {
-    background: none;
-    border: none;
     padding: 0;
     cursor: pointer;
-    color: rgb(194, 177, 177);
+    color: #fff;
     font-size: 1.3rem;
-  }
-
-  .liked-button:focus{
-    outline: none;
   }
 
   .comment-btn{
     background: none;
-    color: #b4afaf;
+    color: #fff;
     border: none;
     font-size: 1.4rem;
     margin-left: 10px;
   }
 
-  .comment{
-    overflow: hidden;
-    transition: width 0.3s ease;
-    height: 0;
-  }
-
-  .comment.enhance{
+  .comment {
     display: flex;
-    justify-content: center;
-    text-align: center;
-    height: auto;
+    align-items: center;
+    margin-top: 10px;
   }
 
-  .comment input{
-    padding: 8px 0px;
-    width: 75%;
-    border:2px solid #b4afaf;
-    border-radius: 4px;
+
+  .comment input {
+    padding: 8px;
+    font-size: 1rem;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    width: 80%;
+    margin-right: 10px;
+  }
   
-  }
-
-  .comment button{
-    padding: 0px 10px;
-    font-size: 1.5rem;
-    background-color: #1717e7;
+  .comment button {
+    padding: 8px 12px;
+    background-color: #007BFF;
     color: white;
     border: none;
-    margin-left: 3px;
-    border-radius: 4px;
+    border-radius: 5px;
+    cursor: pointer;
   }
 
-  .view-comments{
-    overflow: hidden;
-    transition: width 0.3s ease;
-    height: 0px;
-    margin-top: 20px;
+  .comment button:hover {
+    background-color: #0056b3;
+  }
+  
+
+  .view-comments {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  }
+  .view-comments > div {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 15px;
+    padding: 10px;
+    background-color: #fff;
+    border-radius: 5px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
   }
 
-  .view-comments.enhance{
-    align-items: left;
+  .view-comments a {
+    color: #007BFF;
+    cursor: pointer;
+    font-size: 0.9rem;
+    text-decoration: none;
+    margin-bottom: 5px;
+  }
+
+  .view-comments p {
+    margin: 10px 0;
+    color: #333;
     font-size: 1rem;
-    padding: 5px;
-    height: auto;
-  }
-
-  .view-comments p{
-    padding: 2px 0;
+    line-height: 1.4;
   }
 
 
@@ -172,7 +252,7 @@
     /* margin-bottom: 20px; */
     padding: 20px;
     gap: 10px;
-    background-color: #FFF8F3;
+    background-color: #205781;
   }
 
   .nav-home-link {
@@ -180,9 +260,9 @@
   }
 
   .nav-home-link {
-    background-color:  #FFF8F3;
+    background-color:  #205781;
     color: black;
-    border: 1px solid #FFF8F3;
+    border: 1px solid #205781;
     cursor: pointer;
     font-size: 2rem;
     padding: 0px 8px 0 8px;
@@ -228,7 +308,7 @@
   }
 
   .nav-button {
-    background-color: #FFF8F3;  
+    background-color: #205781;  
     font-size: 1.95rem;
     border: none;
     cursor: pointer;
@@ -241,7 +321,7 @@
   }
 
   .nav-links{
-    background-color: #FFF8F3;
+    background-color: black;
     overflow: hidden;
     transition: width 0.3s ease;
     width: 0;
@@ -262,7 +342,8 @@
     text-align: left;
     margin-top: 8px;
     padding: 10px 10px;
-    background-color: #FFF8F3;
+    background-color: black;
+    color: white;
     border: none;
     cursor: pointer;
   }
@@ -270,6 +351,7 @@
   .nav-links button:hover{
     border-radius: 5px;
     background-color: #FBF6E2;
+    color: #205781  ;
   }
 
 
@@ -283,7 +365,7 @@
 
 
   .notification-icon-unread{
-    color: black;
+    color: #F8ED8C;
     font-size: 1.75rem;
     background: none;
     border-radius: 750%;
@@ -296,7 +378,7 @@
 
 
   .notification-icon-read{
-    color: black;
+    color:#F8ED8C;
     font-size: 1.75rem;
     background: none;
     border-radius: 750%;
@@ -309,7 +391,7 @@
 
 
   .notification-tiles {
-    background-color: #FFF8F3;
+    background-color: #205781;
     overflow: scroll;
     transition: width 0.3s ease, right 0.3s ease;
     width: 0;
@@ -343,25 +425,25 @@
   .notification-message-unread{
     height: 30px;
     padding: 10px;
-    background-color: #F7CFD8;
+    background-color: #4F959D;
     cursor: pointer;
   }
 
   .notification-message-read{
     height: 30px;
     padding: 10px;
-    background-color: #FFF8F3;
+    background-color: #205781;
     cursor: pointer;
   }
 
   .notification-message-read:hover{
-    background-color: #FFEBD4;
-    border: #F7CFD8 solid .05rem;
+    background-color: #98D2C0;
+    border: #98D2C0 solid .05rem;
   }
 
   .notification-message-unread:hover{
-    background-color: #FFEBD4;
-    border: #F7CFD8 solid .05rem;
+    background-color: #98D2C0;
+    border: #98D2C0 solid .05rem;
   }
 
   .nav-notification-button {
@@ -454,12 +536,22 @@
 
 
  /* for phones and tabs */
- @media (max-width: 768px) {
-  .post-container{
+ @media (max-width: 600px) {
+  .post-container-with-cmt{
     margin: 0 auto 50px;
     width: 95%;
-    padding: 3px;
-     padding: 5px;
+  }
+
+  .post-ownerinfo img{
+    width: 45px;
+    height: 45px;
+    border: 2px solid #817474;
+  }
+
+
+  .post-actions {
+    bottom: 15%;
+    
   }
 
   .nav-home-link{

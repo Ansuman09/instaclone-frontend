@@ -2,6 +2,7 @@ import { faDeleteLeft } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { jwtDecode } from "jwt-decode";
 import React, { useState, useEffect } from "react";
+import "./ManageRolesController.css";
 
 const ManageRolesController = () => {
     const token = localStorage.getItem('token');
@@ -27,7 +28,7 @@ const ManageRolesController = () => {
 
             const data = await response.json();
             setRoles(data.map((role) => role.role));
-            console.log(data);
+            
         } catch (error) {
             console.log(error);
         }
@@ -46,13 +47,11 @@ const ManageRolesController = () => {
                 body: JSON.stringify(formData),
             });
 
-            console.log("Post successfully created!");
 
             if (response.ok) {
                 setReportUserRoleStatus("Roles updated successfully!");
             }
         } catch (e) {
-            console.log(e);
             setReportUserRoleStatus("Unable to update roles.");
         }
     };
@@ -70,7 +69,7 @@ const ManageRolesController = () => {
     };
 
     return (
-        <div>
+        <div className="roles-contoller">
             <form onSubmit={getUserData}>
                 <label>Username:</label>
                 <input
