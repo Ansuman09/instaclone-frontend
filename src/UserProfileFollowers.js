@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { setFollowers } from "./features/Subscriptions";
+import FollowFollowingModal from "./Modals/FollowFollowingModal";
 
 const UserProfileFollowers = ({ username }) => {
   const token = localStorage.getItem("token");
@@ -9,6 +10,17 @@ const UserProfileFollowers = ({ username }) => {
   const subsDispatch = useDispatch();
   const subs = useSelector((state) => state.subs);
   const [loading, setLoading] = useState(true);
+
+  const [showFollowersModal,setShowFollowers]=useState(false);
+
+  const showFollowers=()=>{
+      setShowFollowers(true);
+  }
+
+  const closeFollowing=()=>{
+      console.log("Executed close")
+      setShowFollowers(false);
+  }
 
   useEffect(() => {
     const fetchFollowers = async () => {
@@ -46,8 +58,10 @@ const UserProfileFollowers = ({ username }) => {
 
   return (
     <div className="userinfo-followers">
-      <h1>{subs.followersCount}</h1>
-      <h2>followers</h2>
+      <h1  onClick={showFollowers}>{subs.followersCount}</h1>
+      <h2  onClick={showFollowers}>followers</h2>
+      <FollowFollowingModal userInfoData={subs.followers} showModal={showFollowersModal} closeModal={()=>setShowFollowers(false)} />
+            
     </div>
   );
 };

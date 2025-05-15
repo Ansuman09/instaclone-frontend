@@ -1,6 +1,6 @@
 import React, { useState,useEffect } from "react";
 import { useNavigate } from "react-router";
-import { faBars, faBell, faBellConcierge, faBellSlash, faCamera, faClose, faCross, faHomeAlt, faRightFromBracket, faSearch, faSquareRss, faUserAlt, faUserCircle, faUserGroup, faUserLock, faUserNinja } from "@fortawesome/free-solid-svg-icons";
+import { faBars, faBell, faBellConcierge, faBellSlash, faCamera, faClose, faCross, faHomeAlt, faRightFromBracket, faSearch, faSquareRss, faUserAlt, faUserCircle, faUserGroup, faUserLock, faUserNinja, faWindowClose } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 import { jwtDecode } from "jwt-decode";
@@ -131,7 +131,7 @@ const NavBar = (props) => {
                 </form>
             </div>
             <div className="nav-button-holder item-4">
-                <button type="button" className="nav-button" onClick={handleShowLink}><FontAwesomeIcon icon={faBars}/></button>
+                <button type="button" className="nav-button" onClick={handleShowLink}>{!showNav ? <FontAwesomeIcon icon={faBars}/> : <FontAwesomeIcon icon={faWindowClose}></FontAwesomeIcon>}</button>
             </div>
         </div>
         <div key="navigation-links" className={`nav-links ${showNav ? 'active':''}`} >

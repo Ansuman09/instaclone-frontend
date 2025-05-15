@@ -16,7 +16,7 @@ const SignupPage = () => {
 
     const apiUrl = process.env.REACT_APP_API_URL;
     const token = localStorage.getItem('token');
-    const userRoles = jwtDecode(token).roles;
+    // const userRoles = jwtDecode(token).roles;
 
     const nav = useNavigate();
 
@@ -77,7 +77,7 @@ const SignupPage = () => {
 
     return (
         <div className="login-component">
-            {userRoles.includes("ROLE_ROLES_MANAGER") && (
+            {/* {userRoles.includes("ROLE_ROLES_MANAGER") && ( */}
                 <div className="login-container">
                     <h3 className="app-name">VibeSphere</h3>
                     <form onSubmit={handleSubmit} className="login-form">
@@ -118,7 +118,7 @@ const SignupPage = () => {
                         {errorMessage && <p>{errorMessage}</p>}
                     </form>
                 </div>
-            )}
+            
             <PrivacyPolicyModal showModal={showPrivacyPopUp} closeModal={closePrivacyPagePopUp} />
         </div>
     );

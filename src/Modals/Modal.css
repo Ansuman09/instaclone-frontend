@@ -31,7 +31,29 @@
     border: none;
     cursor: pointer;
   }
-  
+
+    .users-contianer{
+      display: block;
+    }
+
+    .modal-userinfo{
+      width: 90%;
+      padding: 10px;
+      display: flex;
+      gap: 10px;
+      cursor: pointer;
+    }
+
+    .modal-userinfo:hover{
+      background-color: aliceblue;
+    }
+    
+    .modal-userinfo img{
+      height: 60px;
+      width: 60px;
+      border: solid grey 2px;
+      border-radius: 50%;
+    }
   .close-btn:hover{
     background-color: #A31D1D;
     }
@@ -71,4 +93,6 @@
     border-radius: 10px;
     margin-right: 20px;
   }
+
+  
 }

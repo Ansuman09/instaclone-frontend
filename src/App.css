@@ -160,6 +160,7 @@
   .userinfo-followers {
     text-align: center;
     padding: 50px 20px 10px 0;
+    cursor: pointer;
   }
 
   .liked-button {
@@ -576,6 +577,21 @@
     display: none;
   }
   
+  
+  .nav-links.active{
+    width: 100%;  
+    height: 100%;
+
+  }
+
+  
+  .notification-tiles.active {
+    border: #333;
+    border-top: solid;
+    width: 100%;
+    right: 0; 
+  }
+
   .nav-search-bar i {
     font-size: .98rem;
     margin-left: 4px;
@@ -626,15 +642,16 @@
 .userinfo-followers{
   text-align: right;
   padding: 30px 40px 40px 0;
-  
 }
 
 .userinfo-followers h1{
   font-size: 20px;
   text-align: center;
+  cursor: pointer;
 }
 
 .userinfo-followers h2{
   font-size: 15px;
+  cursor: pointer;
 }
     }
