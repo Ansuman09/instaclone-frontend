@@ -424,14 +424,12 @@
   }
 
   .notification-message-unread{
-    height: 30px;
     padding: 10px;
     background-color: #4F959D;
     cursor: pointer;
   }
 
   .notification-message-read{
-    height: 30px;
     padding: 10px;
     background-color: #205781;
     cursor: pointer;

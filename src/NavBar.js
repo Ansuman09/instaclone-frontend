@@ -5,9 +5,10 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 import { jwtDecode } from "jwt-decode";
 import { useDispatch, useSelector } from "react-redux";
-import { setNotifications,updateNotifications } from "./features/Notifications";
+import { setNotifications,updateNotifications,deleteFollowState, updateFollowRequest } from "./features/Notifications";
 import FollowTrending from "./FollowTrending";
 import { faHome } from "@fortawesome/free-solid-svg-icons/faHome";
+import NotificationLine from "./MicroComponents/NotificationLine";
 
 const NavBar = (props) => {
     const [searchString, setSearchString] = useState("");
@@ -41,7 +42,6 @@ const NavBar = (props) => {
         if(response.ok){
             const data = await response.json();
             notificationDispatch(setNotifications(data));
-           
         }}  
 
         fetchNotifications();
@@ -51,6 +51,48 @@ const NavBar = (props) => {
         nav('/homepage');
     };
 
+    // accpets follow request
+    const handleAcceptFollow=async(data)=>{
+        try {
+                const responseToUpdateFollow = await fetch(
+                  `${apiUrl}/followers/acceptFollow`,
+                  {
+                    method: "POST",
+                    headers: {
+                      "Content-Type": "application/json",
+                      Authorization: `Bearer ${token}`,
+                    },body:JSON.stringify(data)
+                  }
+                );
+        
+                if (responseToUpdateFollow=="ok"){
+                    console.log("follow success")
+                }
+        
+              } catch (error) {
+                console.error(error);
+              }
+
+            notificationDispatch(updateFollowRequest(data.id))
+    }
+
+    //reject follow request
+    const deletFollowRequest=async(data)=>{
+        const response = await fetch(`${apiUrl}/api/notifications/delete/follow-request`,{
+            method:"POST",
+            headers:{
+                "Content-Type":"application/json",
+                Authorization: `Bearer ${token}`
+            },
+            body:JSON.stringify(data)
+        })
+
+        if (response.ok){
+            console.log(response.text());
+        }
+
+        notificationDispatch(deleteFollowState(data.id));
+    }
 
     const handleSearch = (e) => {
         if (currentPath==`/search/${encodeURIComponent(searchString)}`){
@@ -150,9 +192,7 @@ const NavBar = (props) => {
         </div>
         <div key="notification" className={`notification-tiles ${showNotification ? 'active':''}`}>
             {notifications.map(notification=>(
-                <div  key={notification.id} className={`notification-message-${notification.status}`} onClick={()=>handleReadNotification(notification.id)}>
-                    <b>{notification.actinguser} </b> {notification.message}
-                </div>
+                <NotificationLine notification={notification} onRead={handleReadNotification} acceptFollow={handleAcceptFollow} rejectFollow={deletFollowRequest}/>
             ))}
         </div>
         {showFollowerSlide===true ? <FollowTrending apiUrl={apiUrl} token={token}/>: <div className="follower-slide-icon" onClick={()=>{setShowFollowerSlide(true)}}><FontAwesomeIcon icon={faUserGroup}/></div>}

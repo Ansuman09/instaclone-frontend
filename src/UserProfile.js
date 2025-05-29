@@ -22,6 +22,9 @@ const UserProfile = () => {
   const subsDispatch = useDispatch();
   const subs = useSelector((state) => state.subs);
 
+  //Need to add feature to unrequest
+  const [requestFollow,setRequestFollow] = useState(false);
+
   const fetchImageUrl = async (imageName) => {
     try {
       const response = await fetch(`${apiUrl}/get-images/images/${imageName}`, {
@@ -61,15 +64,16 @@ const UserProfile = () => {
         }
 
         const userData = await response.json();
+        
+        console.log(userData)
         setUser(userData);
         setFollowResponse(userData.is_following);
-        
+        setRequestFollow(userData.has_requested);
         // Fetch profile image URL
         if (userData.profile_image) {
           const imageUrl = await fetchImageUrl(userData.profile_image);
           setUserProfileImage(imageUrl);
         }
-
         setLoading(false);
       } catch (error) {
         console.error("Error fetching user data:", error);
@@ -84,8 +88,7 @@ const UserProfile = () => {
     const data = {
       following_id: user.userid,
     };
-
-    try {
+      try {
       await fetch(`${apiUrl}/followers/add`, {
         method: 'POST',
         headers: {
@@ -94,14 +97,38 @@ const UserProfile = () => {
         },
         body: JSON.stringify(data),
       });
-
-      setFollowResponse(true);
-      subsDispatch(doFollow());
-    } catch (error) {
+         setFollowResponse(true);
+        subsDispatch(doFollow());
+        } catch (error) {
       console.error("Unable to follow user:", error);
-    }
+    } 
+   
+    
   };
 
+  const handleRequestToFollow = async ()=>{
+       const data = {
+      following_id: user.userid,
+    };
+      try{
+        const response= await fetch(`${apiUrl}/followers/request`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify(data),
+        
+      }
+    )
+    console.log(data)
+    setRequestFollow(true)}
+      catch(e){
+        console.log(e);
+      }
+    
+      
+  }
   const handleUnfollow = async () => {
     const data = {
       following_id: user.userid,
@@ -118,12 +145,35 @@ const UserProfile = () => {
       });
 
       setFollowResponse(false);
+      
       subsDispatch(doUnFollow());
     } catch (error) {
       console.error("Unable to unfollow user:", error);
     }
   };
 
+  const handleRecallRequest=async()=>{
+    //should be in same queue as follow requests
+    
+
+    try {
+      const response = await fetch(`${apiUrl}/followers/delete/follow-request/${username}`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
+        }
+        });
+      
+      if (response.ok){
+        setRequestFollow(false)
+      }
+       } catch (error) {
+      console.error("Unable to unfollow user:", error);
+    } 
+  }
+
+  
   if (loading) {
     return <HomeLoading/>;
   }
@@ -134,15 +184,25 @@ const UserProfile = () => {
         <NavBar />
       </div>
 
-      <div className="user-profile-username-and-follow">
+      {user.private_account=="no" && <div className="user-profile-username-and-follow">
         <h4>{user.username}</h4>
         <a
           className={followResponse ? "unfollow-button" : "follow-button"}
           onClick={followResponse ? handleUnfollow : handleFollow}
         >
-          {followResponse ? "Unfollow" : "Follow"}
+       {followResponse ? "Unfollow":"Follow"}
         </a>
-      </div>
+      </div>}
+
+      {user.private_account=="yes" && <div className="user-profile-username-and-follow">
+        <h4>{user.username}</h4>
+        <a
+          className={followResponse ? "unfollow-button": requestFollow ? "unfollow-button" : "follow-button"}
+          onClick={ followResponse ? handleUnfollow : requestFollow ? handleRecallRequest:handleRequestToFollow}
+        >
+       {followResponse? "Unfollow": requestFollow ? "Requested":"Follow"}
+        </a>
+      </div>}
 
       <div className="userinfo-container">
         <div className="userimg-container">
@@ -153,7 +213,7 @@ const UserProfile = () => {
         <UserProfileFollowing username={username} />
       </div>
 
-      <UserProfilePosts username={username} />
+      {user.private_account==="yes" ? followResponse && <UserProfilePosts username={username}/> :<UserProfilePosts username={username} />}
     </div>
   );
 };

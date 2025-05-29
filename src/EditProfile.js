@@ -16,6 +16,7 @@ const editProfile=()=>{
     const [changeProfileImage,setChangeProfileImage]=useState(false);
     const [updloadedImage,setUploadedImage]=useState();
     const [userDataToSend,setUserDataToSend]=useState({});
+    const [isPrivate,setIsPrivate]=useState();
 
     const fetchImageUrl = async (imageName) => {
         console.log("Called image data");
@@ -56,6 +57,7 @@ const editProfile=()=>{
   
           const userData=await response.json();
           setUser(userData);
+          setIsPrivate(userData.private_account)
           setUserDataToSend(userData);
           console.log(userData);
         }catch(error){
@@ -116,6 +118,33 @@ const editProfile=()=>{
     
     };
 
+    const handlePrivateAccountSetting=async()=>{
+      var newState="";
+      if (isPrivate==="yes"){
+        newState="no";
+      }else {
+        newState="yes"
+      }
+
+       try {
+        const response = await fetch(`${apiUrl}/userinfo/toggle/private/${newState}`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${token}`,
+          }
+       });
+        
+        if (response.ok){
+          setIsPrivate(newState);
+        }
+      }
+        catch (e) {
+        console.error('Unable to update name:', e);
+      }
+      
+    }
+
     const handleUsernameUpdate = async () => {
       
       try {
@@ -142,6 +171,7 @@ const editProfile=()=>{
     };
 
 
+    // const
 
     return(
     <div>
@@ -157,8 +187,20 @@ const editProfile=()=>{
             
             <p></p>
             <img src={userProfileImage} alt="Profile image"></img>
-            <p></p>
+            <div className="settings">
+              <div className="private-setting">
+              <span style={{ marginTop: "auto"}}>Private</span>
+              
+                <label class="slide-switch">
+                  <input type="checkbox" checked={isPrivate==="yes"} onChange={handlePrivateAccountSetting}></input>
+                  <span class="slider round"></span>
+                </label>
+              
+              </div>
+                
+            </div>
             
+         
             {/* <p>Username: </p>
             <input value={userDataToSend.username} onChange={(e)=>setUserDataToSend({...userDataToSend,username:e.target.value})}></input>
             <span className="update-username" onClick={handleUsernameUpdate}><FontAwesomeIcon icon={faArrowCircleRight}/></span> */}

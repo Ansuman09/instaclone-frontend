@@ -20,9 +20,31 @@ const notificationSlice = createSlice({
                 }
             })
            } 
+        },
+
+        updateFollowRequest:(state,action)=>{
+            return{
+                ...state,
+                value: state.value.map(notification=>{
+                    if(action.payload===notification.id){
+                    return {...notification,message:"started following you",action:"follow"};
+                }else {
+                    return {...notification}
+                }
+                })
+            }
+        },
+
+        deleteFollowState:(state,action)=>{
+            return{
+                 ...state,
+                value: state.value.filter((notification) => {
+                return action.payload !== notification.id;
+                })
+            }
         }
     }
 })
 
-export const {setNotifications,updateNotifications}=notificationSlice.actions;
+export const {setNotifications,updateNotifications,updateFollowRequest,deleteFollowState}=notificationSlice.actions;
 export default notificationSlice.reducer;
